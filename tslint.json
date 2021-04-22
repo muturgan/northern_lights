@@ -7,7 +7,30 @@
         "allow-pascal-case"
       ]
     },
-    "ordered-imports": [false],
+    "ordered-imports": [true, {
+      "grouped-imports": true,
+      "groups": [
+        {
+          "name": "npm packages",
+          "match": "^[^.]",
+          "order": 0
+        }, {
+          "name": "current folder",
+          "match": "^./",
+          "order": 2
+        }, {
+          "name": "upper folder",
+          "match": "^../",
+          "order": 3
+        }, {
+          "name": "twice upper folder",
+          "match": "^../../",
+          "order": 4
+        }
+      ],
+      "import-sources-order": "case-insensitive",
+      "named-imports-order": "case-insensitive"
+    }],
     "no-implicit-dependencies": false,
     "no-consecutive-blank-lines": false,
     "no-console": [true, "log"],

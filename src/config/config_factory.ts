@@ -1,5 +1,6 @@
 import { ConfigFactory } from '@nestjs/config';
 import dotenv from 'dotenv';
+
 import { IAppConfig } from './typings';
 
 export const configFactory: ConfigFactory<IAppConfig> = () => {

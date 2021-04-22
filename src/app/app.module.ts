@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { configOptions } from '../config';
+
 import { ApiController } from './api.controller';
+
+import { configOptions } from '../config';
 
 @Module({
    imports: [ConfigModule.forRoot(configOptions)],

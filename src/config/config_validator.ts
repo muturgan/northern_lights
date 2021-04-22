@@ -1,5 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { IsIP, IsNotEmpty, IsNumber, IsNumberString, validateSync } from 'class-validator';
+
 import { IAppConfig } from './typings';
 
 
