@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app/app.module';
@@ -9,8 +10,12 @@ async function bootstrap(): Promise<NestFastifyApplication>
       new FastifyAdapter(),
    );
 
-   await app.listen('7777', '0.0.0.0')
-      .then(() => console.info(`App running on ${'port'}`));
+   const configService = app.get(ConfigService);
+   const APP_PORT = configService.get('APP_PORT');
+   const APP_HOST = configService.get('APP_HOST');
+
+   await app.listen(APP_PORT, APP_HOST)
+      .then(() => console.info(`App running on ${ APP_PORT }`));
 
    return app;
 }
