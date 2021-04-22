@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ApiController } from './api.controller';
 
-import { configOptions } from '../config';
+import { configOptions, DB_CONFIG } from '../config';
 
 const dbEntities: Function[] = [];
 
@@ -14,7 +14,7 @@ const dbEntities: Function[] = [];
       TypeOrmModule.forRootAsync({
          imports: [ConfigModule],
          useFactory: (config: ConfigService) => {
-            const dbConfig = config.get('DB_CONFIG');
+            const dbConfig = config.get(DB_CONFIG as any);
             dbConfig.entities = dbEntities;
             return dbConfig;
          },

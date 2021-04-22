@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { AppModule } from './app/app.module';
+import { APP_HOST, APP_PORT } from './config';
 
 async function bootstrap(): Promise<NestFastifyApplication>
 {
@@ -12,11 +13,11 @@ async function bootstrap(): Promise<NestFastifyApplication>
    );
 
    const configService = app.get(ConfigService);
-   const APP_PORT = configService.get('APP_PORT');
-   const APP_HOST = configService.get('APP_HOST');
+   const appPort = configService.get(APP_PORT);
+   const appHost = configService.get(APP_HOST);
 
-   await app.listen(APP_PORT, APP_HOST)
-      .then(() => console.info(`App running on ${ APP_PORT }`));
+   await app.listen(appPort, appHost)
+      .then(() => console.info(`App running on ${ appPort }`));
 
    return app;
 }
