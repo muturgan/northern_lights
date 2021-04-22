@@ -1,7 +1,38 @@
-import { plainToClass } from 'class-transformer';
-import { IsIP, IsNotEmpty, IsNumber, IsNumberString, validateSync } from 'class-validator';
+import { plainToClass, Type } from 'class-transformer';
+import { IsBoolean, IsInt, IsIP, IsNotEmpty, IsString, ValidateNested, validateSync } from 'class-validator';
 
 import { IAppConfig } from './typings';
+
+export class DbConfig
+{
+    @IsString()
+    @IsNotEmpty()
+    public readonly database!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    public readonly host!: string;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    public readonly logging!: boolean;
+
+    @IsString()
+    @IsNotEmpty()
+    public readonly password!: string;
+
+    @IsInt()
+    @IsNotEmpty()
+    public readonly port!: number;
+
+    @IsString()
+    @IsNotEmpty()
+    public readonly type!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    public readonly username!: string;
+}
 
 
 export class AppConfig implements IAppConfig
@@ -10,15 +41,20 @@ export class AppConfig implements IAppConfig
     @IsNotEmpty()
     public readonly APP_HOST!: string;
 
-    @IsNumberString()
-    @IsNumber()
-    public readonly APP_PORT!: string;
+    @IsInt()
+    @IsNotEmpty()
+    public readonly APP_PORT!: number;
+
+    @ValidateNested()
+    @Type(() => DbConfig)
+    @IsNotEmpty()
+    public readonly DB_CONFIG!: DbConfig;
 }
 
 
 export function validateConfig(config: Record<string, any>): IAppConfig {
     const parsedConfig = plainToClass(AppConfig, config);
-    const errors = validateSync(parsedConfig, { skipMissingProperties: true });
+    const errors = validateSync(parsedConfig);
 
     if (errors.length > 0) {
         throw new Error(errors.toString());
