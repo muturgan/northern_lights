@@ -1,2 +1,2 @@
-# my-project-template
-template for new projects
+# northern_lights
+northern_lights backend
