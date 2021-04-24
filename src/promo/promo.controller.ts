@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post, UsePipes, ValidationPipe 
 
 import { PromoDto, RegistrationDto } from './dto';
 import { PromoService } from './promo.service';
+import { IApiResponse } from './system_models';
 
 
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -17,7 +18,7 @@ export class PromoController
 
    @Post('registration')
    @HttpCode(HttpStatus.OK)
-   public async register(@Body() body: RegistrationDto): Promise<string>
+   public async register(@Body() body: RegistrationDto): Promise<IApiResponse>
    {
       return this.promoService.registerNewUser(body.firstName, body.phone, body.birthDate);
    }
@@ -25,7 +26,7 @@ export class PromoController
 
    @Post('check')
    @HttpCode(HttpStatus.OK)
-   public check(@Body() body: PromoDto): Promise<string>
+   public check(@Body() body: PromoDto): Promise<IApiResponse>
    {
       return this.promoService.checkPromo(body.phone, body.promocode);
    }
@@ -33,7 +34,7 @@ export class PromoController
 
    @Post('activate')
    @HttpCode(HttpStatus.OK)
-   public activate(@Body() body: PromoDto): Promise<string>
+   public activate(@Body() body: PromoDto): Promise<IApiResponse>
    {
       return this.promoService.activatePromo(body.phone, body.promocode);
    }

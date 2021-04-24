@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
+import { IApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, SystemError, UserRegisteredResponse } from './system_models';
 
 const ALPHABET = 'абвгдежзиклмнопрстуфхцчшэюя';
 const ALPHABET_LENGTH = ALPHABET.length;
@@ -41,13 +42,13 @@ export class PromoService
    //  *                               *
    //  *********************************
 
-   public async registerNewUser(firstName: string, phone: string, birthDate: Date | null): Promise<string> {
+   public async registerNewUser(firstName: string, phone: string, birthDate: Date | null): Promise<IApiResponse> {
       const userId = await this.insertNewUser(firstName, phone, birthDate);
       const promocode = await this.grantPromo(userId);
-      return promocode;
+      return new UserRegisteredResponse(promocode);
    }
 
-   public async checkPromo(userPhone: string, promocode: string): Promise<string> {
+   public async checkPromo(userPhone: string, promocode: string): Promise<IApiResponse> {
       const promos: ICheckResult[] = await this.promoRepository.query(
          `SELECT promocode, phone, activated_at FROM promo P
             INNER JOIN users U ON P.holder_id = U.ID
@@ -56,20 +57,20 @@ export class PromoService
       );
 
       if (promos.length === 0) {
-         return 'Not exists';
+         return new PromoNotExistsResponse();
       }
       const promo = promos[0];
       if (promo.activated_at !== null) {
-         return 'Already activated';
+         return new PromoAlreadyActivatedResponse();
       }
 
-      return 'Valid';
+      return new PromoValidResponse();
    }
 
-   public async activatePromo(userPhone: string, promocode: string): Promise<string> {
+   public async activatePromo(userPhone: string, promocode: string): Promise<IApiResponse> {
       const result = await this.checkPromo(userPhone, promocode);
 
-      if (result !== 'Valid') {
+      if ((result instanceof PromoValidResponse) === false) {
          return result;
       }
 
@@ -78,10 +79,10 @@ export class PromoService
          [new Date(), promocode],
       );
       if (updateResult.changedRows !== 1) {
-         throw new Error('omg...');
+         throw new SystemError();
       }
 
-      return 'Ok';
+      return new PromoActivatedResponse();
    }
 
 
