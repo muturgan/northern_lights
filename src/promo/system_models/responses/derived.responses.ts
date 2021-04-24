@@ -1,4 +1,4 @@
-import { ScenarioFail, ScenarioSuccess } from './core.responses';
+import { ScenarioFailResponse, ScenarioSuccessResponse } from './core.responses';
 
 
 //  *********************************
@@ -7,20 +7,20 @@ import { ScenarioFail, ScenarioSuccess } from './core.responses';
 //  *                               *
 //  *********************************
 
-export class UserRegisteredResponse extends ScenarioSuccess {    
+export class UserRegisteredResponse extends ScenarioSuccessResponse {    
     constructor(promoCode: string) {
         const message = `Новый пользователь успешно зарегистрирован. Промокод: ${promoCode}`;
         super(message, promoCode);
     }
 }
 
-export class PromoValidResponse extends ScenarioSuccess {    
+export class PromoValidResponse extends ScenarioSuccessResponse {    
     constructor() {
         super('Промокод корректен');
     }
 }
 
-export class PromoActivatedResponse extends ScenarioSuccess {    
+export class PromoActivatedResponse extends ScenarioSuccessResponse {    
     constructor() {
         super('Промокод успешно активирован');
     }
@@ -33,13 +33,13 @@ export class PromoActivatedResponse extends ScenarioSuccess {
 //  *        Scenario Fail          *
 //  *                               *
 //  *********************************
-export class PromoNotExistsResponse extends ScenarioFail {    
+export class PromoNotExistsResponse extends ScenarioFailResponse {    
     constructor() {
         super('Данный промокод не существует');
     }
 }
 
-export class PromoAlreadyActivatedResponse extends ScenarioFail {    
+export class PromoAlreadyActivatedResponse extends ScenarioFailResponse {    
     constructor() {
         super('Данный промокод уже был активирован');
     }

@@ -1,3 +1,5 @@
+import { DEFAULT_ERROR_MESSAGE } from '../constants';
+
 //  *********************************
 //  *                               *
 //  *          Inderfaces           *
@@ -42,7 +44,7 @@ export class ApiResponse implements IApiResponse {
     ) {}
 }
 
-export class ScenarioSuccess extends ApiResponse implements IScenarioSuccess {
+export class ScenarioSuccessResponse extends ApiResponse implements IScenarioSuccess {
     public readonly scenarioSuccess!: true;
     public readonly systemSuccess!: true;
     
@@ -51,7 +53,7 @@ export class ScenarioSuccess extends ApiResponse implements IScenarioSuccess {
     }
 }
 
-export class ScenarioFail extends ApiResponse implements IScenarioFail {
+export class ScenarioFailResponse extends ApiResponse implements IScenarioFail {
     public readonly scenarioSuccess!: false;
     public readonly systemSuccess!: true;
     
@@ -64,7 +66,7 @@ export class SystemErrorResponse extends ApiResponse implements ISystemErrorResp
     public readonly scenarioSuccess!: false;
     public readonly systemSuccess!: false;
     
-    constructor(result: string, payload?: string | null) {
+    constructor(result: string = DEFAULT_ERROR_MESSAGE, payload?: string | null) {
         super(false, false, result, payload);
     }
 }
