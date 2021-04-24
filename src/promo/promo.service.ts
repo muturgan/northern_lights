@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryFailedError, Repository } from 'typeorm';
+import { EntityManager, getManager, QueryFailedError, Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
 import { IApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnknownError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
@@ -41,16 +41,18 @@ export class PromoService
    //  *********************************
 
    public async registerNewUser(firstName: string, phone: string, birthDate: Date | null): Promise<IApiResponse> {
-      const userId = await this._insertNewUser(firstName, phone, birthDate)
-         .catch((err) => {
-            if (err instanceof QueryFailedError && (err as any).errno === 1062 && (err as any).sqlMessage.includes(`for key 'phone'`)) {
-               throw new UserAlreadyExistsError(phone);
-            }
-            throw err;
-         });
+      return getManager().transaction<IApiResponse>(async (trx) => {
+         const userId = await this._insertNewUser(firstName, phone, birthDate, trx)
+            .catch((err) => {
+               if (err instanceof QueryFailedError && (err as any).errno === 1062 && (err as any).sqlMessage.includes(`for key 'phone'`)) {
+                  throw new UserAlreadyExistsError(phone);
+               }
+               throw err;
+            });
 
-      const promocode = await this._grantPromo(userId);
-      return new UserRegisteredResponse(promocode);
+         const promocode = await this._grantPromo(userId, trx);
+         return new UserRegisteredResponse(promocode);
+      });
    }
 
    public async checkPromo(userPhone: string, promocode: string): Promise<IApiResponse> {
@@ -97,24 +99,24 @@ export class PromoService
    //  *                               *
    //  *********************************
 
-   private async _insertNewUser(firstname: string, phone: string, birthdate: Date | null): Promise<string> {
+   private async _insertNewUser(firstname: string, phone: string, birthdate: Date | null, trx: EntityManager): Promise<string> {
       const entity = this.userRepository.create({
          firstname,
          phone,
          birthdate,
       });
-      const newUser = await this.userRepository.save(entity);
+      const newUser = await trx.save(entity);
 
       return newUser.ID;
    }
 
-   private async _grantPromo(holder_id: string): Promise<string> {
+   private async _grantPromo(holder_id: string, trx: EntityManager): Promise<string> {
       const promocode = this._generateRandomPromo();
       const entity = this.promoRepository.create({
          promocode,
          holder_id,
       });
-      const newPromo = await this.promoRepository.save(entity);
+      const newPromo = await trx.save(entity);
       return newPromo.promocode;
    }
 
