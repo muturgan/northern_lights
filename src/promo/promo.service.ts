@@ -29,9 +29,9 @@ export class PromoService
 {
    constructor(
       @InjectRepository(User)
-      private readonly userRepository: Repository<User>,
+      private readonly _userRepository: Repository<User>,
       @InjectRepository(Promo)
-      private readonly promoRepository: Repository<Promo>,
+      private readonly _promoRepository: Repository<Promo>,
    ) {}
 
    //  *********************************
@@ -56,7 +56,7 @@ export class PromoService
    }
 
    public async checkPromo(userPhone: string, promocode: string): Promise<IApiResponse> {
-      const promos: ICheckResult[] = await this.promoRepository.query(
+      const promos: ICheckResult[] = await this._promoRepository.query(
          `SELECT promocode, phone, activated_at FROM promo P
             INNER JOIN users U ON P.holder_id = U.ID
             WHERE promocode = ? and phone = ?;`,
@@ -81,7 +81,7 @@ export class PromoService
          return result;
       }
 
-      const updateResult: IOkPacket = await this.promoRepository.query(
+      const updateResult: IOkPacket = await this._promoRepository.query(
          `UPDATE promo SET activated_at = ? WHERE promocode = ?;`,
          [new Date(), promocode],
       );
@@ -100,7 +100,7 @@ export class PromoService
    //  *********************************
 
    private async _insertNewUser(firstname: string, phone: string, birthdate: Date | null, trx: EntityManager): Promise<string> {
-      const entity = this.userRepository.create({
+      const entity = this._userRepository.create({
          firstname,
          phone,
          birthdate,
@@ -112,7 +112,7 @@ export class PromoService
 
    private async _grantPromo(holder_id: string, trx: EntityManager): Promise<string> {
       const promocode = this._generateRandomPromo();
-      const entity = this.promoRepository.create({
+      const entity = this._promoRepository.create({
          promocode,
          holder_id,
       });

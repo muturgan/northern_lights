@@ -15,7 +15,7 @@ import { PromoDto, RegistrationDto } from './validation';
 export class PromoController
 {
    constructor(
-      private readonly promoService: PromoService,
+      private readonly _promoService: PromoService,
    ) {}
 
 
@@ -23,7 +23,7 @@ export class PromoController
    @HttpCode(HttpStatus.OK)
    public async register(@Body() body: RegistrationDto): Promise<IApiResponse>
    {
-      return this.promoService.registerNewUser(body.firstName, body.phone, body.birthDate);
+      return this._promoService.registerNewUser(body.firstName, body.phone, body.birthDate);
    }
 
 
@@ -31,7 +31,7 @@ export class PromoController
    @HttpCode(HttpStatus.OK)
    public check(@Body() body: PromoDto): Promise<IApiResponse>
    {
-      return this.promoService.checkPromo(body.phone, body.promocode);
+      return this._promoService.checkPromo(body.phone, body.promocode);
    }
 
 
@@ -39,7 +39,7 @@ export class PromoController
    @HttpCode(HttpStatus.OK)
    public activate(@Body() body: PromoDto): Promise<IApiResponse>
    {
-      return this.promoService.activatePromo(body.phone, body.promocode);
+      return this._promoService.activatePromo(body.phone, body.promocode);
    }
 
 }
