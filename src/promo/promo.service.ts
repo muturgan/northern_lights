@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
-import { IApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, SystemError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
+import { IApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnknownError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
 import { ALPHABET, ALPHABET_LENGTH } from './validation';
 
 interface ICheckResult {
@@ -84,7 +84,7 @@ export class PromoService
          [new Date(), promocode],
       );
       if (updateResult.changedRows !== 1) {
-         throw new SystemError();
+         throw new UnknownError('Не удалось выполнить UPDATE для активации промокода');
       }
 
       return new PromoActivatedResponse();
