@@ -1,3 +1,5 @@
+import { BadRequestException } from '@nestjs/common';
+
 import { ScenarioFailResponse, ScenarioSuccessResponse } from './core.responses';
 
 
@@ -52,6 +54,23 @@ export class PromoAlreadyActivatedResponse extends ScenarioFailResponse {
     }
 }
 
+
+export class ValidationErrorResponse extends ScenarioFailResponse {    
+    constructor(err: BadRequestException) {
+        interface IValidationErrorBody {
+            statusCode: number;
+            message: string[];
+            error: string;
+        }
+
+        const body = err.getResponse() as IValidationErrorBody;
+        const messageObj: Record<string, null> = {};
+        body.message.forEach((m) => messageObj[m] = null);
+        const messageToShow = Object.keys(messageObj).join('; ');
+
+        super(messageToShow);
+    }
+}
 
 //  *********************************
 //  *                               *
