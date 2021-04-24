@@ -1,13 +1,11 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class PromoDto {
-    @Transform(({ value }) => value.toLocaleLowerCase())
-    @IsString()
-    @IsNotEmpty()
-    public readonly promocode!: string;
+import { PhoneDto } from './phone.dto';
 
-    @IsString()
-    @IsNotEmpty()
-    public readonly phone!: string;
+export class PromoDto extends PhoneDto {
+    @Transform(({ value }) => value.toLocaleLowerCase())
+    @IsString({message: 'Введён некорректный промокод'})
+    @IsNotEmpty({message: 'Введён некорректный промокод'})
+    public readonly promocode!: string;
 }
