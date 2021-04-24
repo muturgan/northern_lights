@@ -1,15 +1,46 @@
-import { Transform } from 'class-transformer';
-import { IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { isDateString, IsNotEmpty, IsOptional, IsString, registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator';
 
 import { PhoneDto } from './phone.dto';
 
+const NAME_ERROR_MESSAGE = 'Введено некорректное имя';
+
+
+function IsValidDate(validationOptions?: ValidationOptions): (object: Object, propertyName: string) => void {
+    return function (object: Object, propertyName: string): void {
+        registerDecorator({
+            target: object.constructor,
+            propertyName: propertyName,
+            options: validationOptions,
+            constraints: [],
+            validator: {
+                validate(value: unknown, args: ValidationArguments): boolean {
+                    if (typeof value !== 'string') {
+                        return false;
+                    }
+                    const trimed = value.trim();
+
+                    const valid = isDateString(trimed, {strict: true});
+                    if (valid !== true) {
+                        return false;
+                    }
+
+                    const date = new Date(trimed);
+                    // @ts-ignore
+                    args.object[args.property] = date;
+        
+                    return valid;
+                },
+            },
+        });
+    };
+}
+
 export class RegistrationDto extends PhoneDto {
-    @IsString({message: 'Введено некорректное имя'})
-    @IsNotEmpty({message: 'Введено некорректное имя'})
+    @IsString({message: NAME_ERROR_MESSAGE})
+    @IsNotEmpty({message: NAME_ERROR_MESSAGE})
     public readonly firstName!: string;
 
-    @Transform(({ value }) => value ? new Date(value) : value)
-    @IsDateString(undefined, {message: 'Введена некорректная дата рождения'})
+    @IsValidDate({message: 'Введена некорректная дата рождения'})
     @IsOptional()
     public readonly birthDate: Date | null = null;
 }
