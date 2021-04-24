@@ -4,6 +4,26 @@ import { Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
 
+const ALPHABET = 'абвгдежзиклмнопрстуфхцчшэюя';
+const ALPHABET_LENGTH = ALPHABET.length;
+
+interface ICheckResult {
+   promocode: string;
+   phone: string;
+   activated_at: Date | null;
+}
+
+interface IOkPacket {
+   fieldCount: number;
+   affectedRows: number;
+   insertId: number;
+   serverStatus: number;
+   warningCount: number;
+   message: string;
+   protocol41: boolean;
+   changedRows: number;
+}
+
 
 @Injectable()
 export class PromoService
@@ -15,16 +35,89 @@ export class PromoService
       private readonly promoRepository: Repository<Promo>,
    ) {}
 
-   public async test(): Promise<void> {
-      const user = await this.userRepository.findOne({
-         relations: ['promo'],
+   //  *********************************
+   //  *                               *
+   //  *          Public API           *
+   //  *                               *
+   //  *********************************
+
+   public async registerNewUser(firstName: string, phone: string, birthDate: Date | null): Promise<string> {
+      const userId = await this.insertNewUser(firstName, phone, birthDate);
+      const promocode = await this.grantPromo(userId);
+      return promocode;
+   }
+
+   public async checkPromo(userPhone: string, promocode: string): Promise<string> {
+      const promos: ICheckResult[] = await this.promoRepository.query(
+         `SELECT promocode, phone, activated_at FROM promo P
+            INNER JOIN users U ON P.holder_id = U.ID
+            WHERE promocode = ? and phone = ?;`,
+         [promocode, userPhone],
+      );
+
+      if (promos.length === 0) {
+         return 'Not exists';
+      }
+      const promo = promos[0];
+      if (promo.activated_at !== null) {
+         return 'Already activated';
+      }
+
+      return 'Valid';
+   }
+
+   public async activatePromo(userPhone: string, promocode: string): Promise<string> {
+      const result = await this.checkPromo(userPhone, promocode);
+
+      if (result !== 'Valid') {
+         return result;
+      }
+
+      const updateResult: IOkPacket = await this.promoRepository.query(
+         `UPDATE promo SET activated_at = ? WHERE promocode = ?;`,
+         [new Date(), promocode],
+      );
+      if (updateResult.changedRows !== 1) {
+         throw new Error('omg...');
+      }
+
+      return 'Ok';
+   }
+
+
+   //  *********************************
+   //  *                               *
+   //  *        Private Methods        *
+   //  *                               *
+   //  *********************************
+
+   private async insertNewUser(firstname: string, phone: string, birthdate: Date | null): Promise<string> {
+      const entity = this.userRepository.create({
+         firstname,
+         phone,
+         birthdate,
       });
-      console.log('user:');
-      console.log(user);
-      const promo = await this.promoRepository.findOne({
-         relations: ['holder'],
+      const newUser = await this.userRepository.save(entity);
+
+      return newUser.ID;
+   }
+
+   private async grantPromo(holder_id: string): Promise<string> {
+      const promocode = this.generateRandomPromo();
+      const entity = this.promoRepository.create({
+         promocode,
+         holder_id,
       });
-      console.log('promo:');
-      console.log(promo);
+      const newPromo = await this.promoRepository.save(entity);
+      return newPromo.promocode;
+   }
+
+   private generateRandomPromo(promocodeLength: number = 8): string {
+      const chars = [];
+      for ( let i = 0; i < promocodeLength; i++ ) {
+         chars.push(ALPHABET.charAt(Math.floor(Math.random() * ALPHABET_LENGTH)));
+      }
+      const promocode = chars.join('');
+      return promocode;
    }
 }

@@ -1,11 +1,10 @@
-import { Controller, /*UseFilters, UsePipes, UseInterceptors,*/ HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 
+import { PromoDto, RegistrationDto } from './dto';
 import { PromoService } from './promo.service';
 
 
-// @UsePipes()
-// @UseFilters()
-// @UseInterceptors()
+@UsePipes(new ValidationPipe({ transform: true }))
 
 
 @Controller('api')
@@ -18,23 +17,25 @@ export class PromoController
 
    @Post('registration')
    @HttpCode(HttpStatus.OK)
-   public async register(): Promise<void>
+   public async register(@Body() body: RegistrationDto): Promise<string>
    {
-      return this.promoService.test();
+      return this.promoService.registerNewUser(body.firstName, body.phone, body.birthDate);
    }
 
 
    @Post('check')
    @HttpCode(HttpStatus.OK)
-   public async check(): Promise<void>
+   public check(@Body() body: PromoDto): Promise<string>
    {
+      return this.promoService.checkPromo(body.phone, body.promocode);
    }
 
 
    @Post('activate')
    @HttpCode(HttpStatus.OK)
-   public async activate(): Promise<void>
+   public activate(@Body() body: PromoDto): Promise<string>
    {
+      return this.promoService.activatePromo(body.phone, body.promocode);
    }
 
 }

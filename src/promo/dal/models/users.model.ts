@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Promo } from './promo.model';
 
@@ -9,7 +9,7 @@ export class User
 {
     public static readonly TABLE_NAME = TABLE_NAME;
 
-    @PrimaryColumn({ type: 'bigint', unsigned: true })
+    @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     public ID!: string;
 
     @Column({ type: 'varchar', length: 32, nullable: false })
