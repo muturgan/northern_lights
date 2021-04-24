@@ -4,9 +4,7 @@ import { QueryFailedError, Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
 import { IApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, SystemError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
-
-const ALPHABET = 'абвгдежзиклмнопрстуфхцчшэюя';
-const ALPHABET_LENGTH = ALPHABET.length;
+import { ALPHABET, ALPHABET_LENGTH } from './validation';
 
 interface ICheckResult {
    promocode: string;
