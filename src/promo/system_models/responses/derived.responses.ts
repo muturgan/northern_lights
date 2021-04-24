@@ -11,7 +11,7 @@ import { ScenarioFailResponse, ScenarioSuccessResponse } from './core.responses'
 
 export class UserRegisteredResponse extends ScenarioSuccessResponse {    
     constructor(promoCode: string) {
-        const message = `Новый пользователь успешно зарегистрирован. Промокод: ${promoCode}`;
+        const message = `Новый пользователь успешно зарегистрирован. Промокод: ${promoCode.toUpperCase()}`;
         super(message, promoCode);
     }
 }
