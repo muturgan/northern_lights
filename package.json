@@ -12,7 +12,10 @@
     "build": "(rm -rf dist || npx rimraf dist) && tsc -P tsconfig.build.json",
     "dev": "nodemon",
     "audit": "npm audit | grep 'found' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
-    "lint": "tslint --project ./tslint.json | grep -E 'ERROR' && exit 1 || exit 0"
+    "lint": "tslint --project ./tslint.json | grep -E 'ERROR' && exit 1 || exit 0",
+    "migrate": "npm run build && typeorm migration:run",
+    "revert": "npm run build && typeorm migration:revert",
+    "create": "ts-node ./node_modules/.bin/typeorm migration:create -n"
   },
   "repository": {
     "type": "git",

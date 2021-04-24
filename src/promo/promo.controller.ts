@@ -1,5 +1,7 @@
 import { Controller, /*UseFilters, UsePipes, UseInterceptors,*/ HttpCode, HttpStatus, Post } from '@nestjs/common';
 
+import { PromoService } from './promo.service';
+
 
 // @UsePipes()
 // @UseFilters()
@@ -7,12 +9,18 @@ import { Controller, /*UseFilters, UsePipes, UseInterceptors,*/ HttpCode, HttpSt
 
 
 @Controller('api')
-export class ApiController
+export class PromoController
 {
+   constructor(
+      private readonly promoService: PromoService,
+   ) {}
+
+
    @Post('registration')
    @HttpCode(HttpStatus.OK)
    public async register(): Promise<void>
    {
+      return this.promoService.test();
    }
 
 

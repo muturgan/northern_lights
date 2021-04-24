@@ -2,7 +2,6 @@ import { ConfigFactory } from '@nestjs/config';
 import dotenv from 'dotenv';
 
 import { validateConfig } from './config_validator';
-import { APP_HOST, APP_PORT, DB_CONFIG } from './keys';
 import { IAppConfig } from './typings';
 
 export const configFactory: ConfigFactory<IAppConfig> = () => {
@@ -12,9 +11,9 @@ export const configFactory: ConfigFactory<IAppConfig> = () => {
     }
 
     const config: IAppConfig = {
-        [APP_HOST]: parsed.APP_HOST,
-        [APP_PORT]: Number(parsed.APP_PORT),
-        [DB_CONFIG]: {
+        APP_HOST: parsed.APP_HOST,
+        APP_PORT: Number(parsed.APP_PORT),
+        DB_CONFIG: {
             database: parsed.DB_NAME,
             host: parsed.DB_HOST,
             logging: parsed.DB_LOG === 'true',
@@ -22,6 +21,9 @@ export const configFactory: ConfigFactory<IAppConfig> = () => {
             port: Number(parsed.DB_PORT),
             type: parsed.DB_TYPE,
             username: parsed.DB_USER,
+            extra: {
+                timezone: parsed.DB_TIME,
+            },
         },
     };
 

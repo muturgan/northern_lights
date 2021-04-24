@@ -1,9 +1,9 @@
-import { APP_HOST, APP_PORT, DB_CONFIG } from './keys';
+// import { APP_HOST, APP_PORT, DB_CONFIG } from './keys';
 
 export interface IAppConfig {
-    readonly [APP_HOST]: string;
-    readonly [APP_PORT]: number;
-    readonly [DB_CONFIG]: {
+    readonly APP_HOST: string;
+    readonly APP_PORT: number;
+    readonly DB_CONFIG: {
         readonly database: string;
         readonly host: string;
         readonly logging: boolean;
@@ -11,5 +11,8 @@ export interface IAppConfig {
         readonly port: number;
         readonly type: string;
         readonly username: string;
+        readonly extra: {
+            readonly timezone: string;
+        };
     };
 }

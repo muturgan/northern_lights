@@ -1,8 +1,13 @@
 import { plainToClass, Type } from 'class-transformer';
 import { IsBoolean, IsInt, IsIP, IsNotEmpty, IsString, ValidateNested, validateSync } from 'class-validator';
 
-import { APP_HOST, APP_PORT, DB_CONFIG } from './keys';
 import { IAppConfig } from './typings';
+
+export class DbExtra {
+    @IsString()
+    @IsNotEmpty()
+    public readonly timezone!: string;
+}
 
 export class DbConfig
 {
@@ -33,6 +38,11 @@ export class DbConfig
     @IsString()
     @IsNotEmpty()
     public readonly username!: string;
+
+    @ValidateNested()
+    @Type(() => DbExtra)
+    @IsNotEmpty()
+    public readonly extra!: DbExtra;
 }
 
 
@@ -40,16 +50,16 @@ export class AppConfig implements IAppConfig
 {
     @IsIP()
     @IsNotEmpty()
-    public readonly [APP_HOST]!: string;
+    public readonly APP_HOST!: string;
 
     @IsInt()
     @IsNotEmpty()
-    public readonly [APP_PORT]!: number;
+    public readonly APP_PORT!: number;
 
     @ValidateNested()
     @Type(() => DbConfig)
     @IsNotEmpty()
-    public readonly [DB_CONFIG]!: DbConfig;
+    public readonly DB_CONFIG!: DbConfig;
 }
 
 
