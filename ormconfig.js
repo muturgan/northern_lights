@@ -15,10 +15,10 @@ const options = {
     synchronize: false,
     logging: parsed.DB_LOG === 'true',
     migrations: [
-        `./dist/app/dal/migrations/*`
+        `./dist/promo/dal/migrations/*`
     ],
     cli: {
-        "migrationsDir": `src/app/dal/migrations`,
+        "migrationsDir": `src/promo/dal/migrations`,
     },
     extra: {
         timezone: parsed.DB_TIME,
