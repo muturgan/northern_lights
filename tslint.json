@@ -1,5 +1,8 @@
 {
   "rules": {
+    "no-var-keyword": true,
+    "prefer-const": [true, {"destructuring": "all"}],
+    "typedef": [true, "call-signature", "parameter", "property-declaration"],
     "variable-name": {
       "options": [
         "allow-leading-underscore",
