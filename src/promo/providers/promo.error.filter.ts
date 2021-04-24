@@ -18,11 +18,11 @@ export class PromoExceptionFilter implements ExceptionFilter
       let unknownError: UnknownError | null = null;
 
       if (exception instanceof ScenarioError) {
-         response = new ScenarioFailResponse(exception.message);
+         response = ScenarioFailResponse.fromError(exception);
       }
 
       else if (exception instanceof SystemError) {
-         response = new SystemErrorResponse(exception.message);
+         response = SystemErrorResponse.fromError(exception);
       }
 
       else if (exception instanceof Error) {
@@ -41,7 +41,7 @@ export class PromoExceptionFilter implements ExceptionFilter
       if (unknownError !== null) {
          unknownError = new UnknownError(undefined, exception);
          console.log('\n-= OMFG... =-');
-         console.log(unknownError);
+         console.log(unknownError.message);
          console.log('---------------');
          console.log(exception);
          console.log('-===========-\n');

@@ -1,4 +1,5 @@
 import { DEFAULT_ERROR_MESSAGE } from '../constants';
+import { ScenarioError, SystemError } from '../errors';
 
 //  *********************************
 //  *                               *
@@ -53,7 +54,12 @@ export class ScenarioSuccessResponse extends ApiResponse implements IScenarioSuc
     }
 }
 
-export class ScenarioFailResponse extends ApiResponse implements IScenarioFail {
+export class ScenarioFailResponse extends ApiResponse implements IScenarioFail
+{
+    public static fromError(err: ScenarioError): ScenarioFailResponse {
+        return new ScenarioFailResponse(err.message, err.payload);
+    }
+
     public readonly scenarioSuccess!: false;
     public readonly systemSuccess!: true;
     
@@ -62,7 +68,12 @@ export class ScenarioFailResponse extends ApiResponse implements IScenarioFail {
     }
 }
 
-export class SystemErrorResponse extends ApiResponse implements ISystemErrorResponse {
+export class SystemErrorResponse extends ApiResponse implements ISystemErrorResponse
+{
+    public static fromError(err: SystemError): SystemErrorResponse {
+        return new SystemErrorResponse(err.message, err.payload);
+    }
+
     public readonly scenarioSuccess!: false;
     public readonly systemSuccess!: false;
     

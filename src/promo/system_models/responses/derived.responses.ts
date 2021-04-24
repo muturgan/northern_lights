@@ -33,6 +33,13 @@ export class PromoActivatedResponse extends ScenarioSuccessResponse {
 //  *        Scenario Fail          *
 //  *                               *
 //  *********************************
+
+export class UserAlreadyExistsResponse extends ScenarioFailResponse {    
+    constructor(phone: string) {
+        const message = `Пользователь с номером телефона ${phone} уже существует`;
+        super(message, phone);
+    }
+}
 export class PromoNotExistsResponse extends ScenarioFailResponse {    
     constructor() {
         super('Данный промокод не существует');

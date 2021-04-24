@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
-import { IApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, SystemError, UserRegisteredResponse } from './system_models';
+import { IApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, SystemError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
 
 const ALPHABET = 'абвгдежзиклмнопрстуфхцчшэюя';
 const ALPHABET_LENGTH = ALPHABET.length;
@@ -43,8 +43,15 @@ export class PromoService
    //  *********************************
 
    public async registerNewUser(firstName: string, phone: string, birthDate: Date | null): Promise<IApiResponse> {
-      const userId = await this.insertNewUser(firstName, phone, birthDate);
-      const promocode = await this.grantPromo(userId);
+      const userId = await this._insertNewUser(firstName, phone, birthDate)
+         .catch((err) => {
+            if (err instanceof QueryFailedError && (err as any).errno === 1062 && (err as any).sqlMessage.includes(`for key 'phone'`)) {
+               throw new UserAlreadyExistsError(phone);
+            }
+            throw err;
+         });
+
+      const promocode = await this._grantPromo(userId);
       return new UserRegisteredResponse(promocode);
    }
 
@@ -92,7 +99,7 @@ export class PromoService
    //  *                               *
    //  *********************************
 
-   private async insertNewUser(firstname: string, phone: string, birthdate: Date | null): Promise<string> {
+   private async _insertNewUser(firstname: string, phone: string, birthdate: Date | null): Promise<string> {
       const entity = this.userRepository.create({
          firstname,
          phone,
@@ -103,8 +110,8 @@ export class PromoService
       return newUser.ID;
    }
 
-   private async grantPromo(holder_id: string): Promise<string> {
-      const promocode = this.generateRandomPromo();
+   private async _grantPromo(holder_id: string): Promise<string> {
+      const promocode = this._generateRandomPromo();
       const entity = this.promoRepository.create({
          promocode,
          holder_id,
@@ -113,7 +120,7 @@ export class PromoService
       return newPromo.promocode;
    }
 
-   private generateRandomPromo(promocodeLength: number = 8): string {
+   private _generateRandomPromo(promocodeLength: number = 8): string {
       const chars = [];
       for ( let i = 0; i < promocodeLength; i++ ) {
          chars.push(ALPHABET.charAt(Math.floor(Math.random() * ALPHABET_LENGTH)));
