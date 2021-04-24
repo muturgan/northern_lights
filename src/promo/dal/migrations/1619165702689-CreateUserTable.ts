@@ -11,7 +11,9 @@ export class CreateUserTable1619165702689 implements MigrationInterface {
             \`phone\`      CHAR(12)  NOT NULL  UNIQUE,
             \`email\`      VARCHAR(32)  DEFAULT NULL  UNIQUE,
             \`created_at\` DATETIME  DEFAULT CURRENT_TIMESTAMP
-        );`);
+        )
+        CHARACTER SET 'utf8'
+        COLLATE 'utf8_general_ci';`);
     }
 
     public async down(qr: QueryRunner): Promise<void> {

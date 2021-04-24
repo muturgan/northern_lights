@@ -10,7 +10,9 @@ export class CreatePromoTable1619165705822 implements MigrationInterface {
                                 REFERENCES \`users\` (ID) ON DELETE NO ACTION,
             \`activated_at\`  DATETIME  DEFAULT NULL,
             \`created_at\`    DATETIME  NOT NULL  DEFAULT CURRENT_TIMESTAMP
-        );`);
+        )
+        CHARACTER SET 'utf8'
+        COLLATE 'utf8_general_ci';`);
     }
 
     public async down(qr: QueryRunner): Promise<void> {
