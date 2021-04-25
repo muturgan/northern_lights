@@ -9,6 +9,8 @@
       <link rel="stylesheet" id="storefront-style-inline-css" href="css/storefront-style-inline-css.css" media="all">
       <link rel="stylesheet" id="elementor-frontend-css" href="css/elementor-frontend-css.css" media="all">
       <link rel="stylesheet" id="storefront-child-style-css" href="css/storefront-child-style-css.css" media="all">
+      <link rel="stylesheet" id="datepicker-css" href="css/datepicker.css" media="all">
+      <link rel="stylesheet" id="promo-css" href="css/promo.css" media="all">
 
       <link rel="https://api.w.org/" href="https://severnoesiyaniebcm.ru/wp-json/">
       <link rel="alternate" type="application/json" href="https://severnoesiyaniebcm.ru/wp-json/wp/v2/pages/3009">
@@ -30,8 +32,7 @@
          [touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }
       </style>
    </head>
-   <body class="home page-template page-template-elementor_header_footer page page-id-3009 wp-embed-responsive theme-storefront woocommerce-js tinvwl-theme-style storefront-align-wide left-sidebar woocommerce-active elementor-default elementor-template-full-width elementor-kit-1453 elementor-page elementor-page-3009" data-elementor-device-mode="desktop">
-      <div id="page" class="hfeed site">
+   <body class="hfeed site home page-template page-template-elementor_header_footer page page-id-3009 wp-embed-responsive theme-storefront woocommerce-js tinvwl-theme-style storefront-align-wide left-sidebar woocommerce-active elementor-default elementor-template-full-width elementor-kit-1453 elementor-page elementor-page-3009" data-elementor-device-mode="desktop">
          <header id="masthead" class="site-header" role="banner" style="background-image: url(img/banner.png); ">
             <div class="col-full">
                <a class="skip-link screen-reader-text" href="#site-navigation">Перейти к навигации</a>
@@ -59,16 +60,38 @@
                                        <div class="elementor-widget-wrap">
                                           <div class="elementor-element elementor-element-b61a138 elementor-widget elementor-widget-heading" data-id="b61a138" data-element_type="widget" data-widget_type="heading.default">
                                              <div class="elementor-widget-container">
-                                                <h4 class="elementor-heading-title elementor-size-default">
-                                                   ПИРОТЕХНИКА
+                                                <h4 id="promo-header" class="elementor-heading-title elementor-size-default">
+                                                   ЗАРЕГИСТРИРУЙТЕСЬ И ПОЛУЧИТЕ ПРОМОКОД НА СКИДКУ
                                                 </h4>
                                              </div>
                                           </div>
                                           <div class="elementor-element elementor-element-7120e48 elementor-widget elementor-widget-image" data-id="7120e48" data-element_type="widget" data-widget_type="image.default">
                                              <div class="elementor-widget-container">
-                                                <div class="elementor-image">
-                                                   <img width="355" height="473" class="elementor-animation-shrink attachment-large size-large" alt="Картинка" loading="lazy">
-                                                </div>
+                                                <form class="promo-form">
+                                                   <p>
+                                                      <label>Имя <span class="required">*</span></label>
+                                                      <input type="text" id="promo-input-firstname" required>
+                                                   </p>
+                                                   <p>
+                                                      <label for="promo-input-phone">Телефон <span class="required">*</span></label>
+                                                      <input type="tel" id="promo-input-phone" required>
+                                                   </p>
+                                                   <p>
+                                                      <label for="promo-input-birthdate">Дата рождения</label>
+                                                      <input type="text" id="promo-input-birthdate" placeholder="ГГГГ-ММ-ДД"/>
+                                                   </p>
+                                                   <p>
+                                                      <output id="promo-output">
+                                                         Введите свои данные
+                                                      </output>
+                                                   </p>
+                                                   <p>
+                                                      <button class="promo-button" type="button">
+                                                         <span>Зарегистрироваться</span>
+                                                         <div class="lds-dual-ring"></div>
+                                                      </button>
+                                                   </p>
+                                                </form>
                                              </div>
                                           </div>
                                        </div>
@@ -102,9 +125,8 @@
             </div>
          </footer>
          <!-- #colophon -->
-      </div>
-      <!-- #page -->
 
-      <script src="../dist/front/js/index.js" ></script>
+      <script src="./js/datepicker.js" ></script>
+      <script src="./js/registration.js" ></script>
    </body>
 </html>

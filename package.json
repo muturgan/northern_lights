@@ -10,7 +10,7 @@
   "scripts": {
     "start": "npm run build && node ./dist/main.js",
     "build": "(rm -rf dist || npx rimraf dist) && tsc -P tsconfig.build.json",
-    "dev": "nodemon",
+    "dev": "cross-env NODE_ENV=dev nodemon",
     "audit": "npm audit | grep 'found' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
     "lint": "tslint --project ./tslint.json | grep -E 'ERROR' && exit 1 || exit 0",
     "migrate": "npm run build && typeorm migration:run",
@@ -42,8 +42,11 @@
     "typeorm": "^0.2.32"
   },
   "devDependencies": {
+    "@nestjs/serve-static": "^2.1.4",
     "@types/mysql": "^2.15.18",
     "@types/node": "^14.14.41",
+    "cross-env": "^7.0.3",
+    "fastify-static": "^4.0.1",
     "nodemon": "^2.0.7",
     "ts-node": "^9.1.1",
     "tslint": "^6.1.3",
