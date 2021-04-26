@@ -5,6 +5,9 @@ if (error !== undefined || parsed === undefined) {
 }
 
 const options = {
+    APP_HOST: parsed.APP_HOST,
+    APP_PORT: parsed.APP_PORT,
+
     type: parsed.DB_TYPE,
     host: parsed.DB_HOST,
     port: parseInt(parsed.DB_PORT, 10),
