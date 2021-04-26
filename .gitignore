@@ -1,6 +1,9 @@
 # local development db
 mysql
 
+# generated static files
+static/js/generated
+
 # Logs
 logs
 *.log

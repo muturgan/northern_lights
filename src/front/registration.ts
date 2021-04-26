@@ -1,3 +1,5 @@
+import { IApiResponse } from '../promo/system_models/responses/typings';
+
 (() => {
 
 const firstNameInput = document.body.querySelector('#promo-input-firstname') as HTMLInputElement | null;
@@ -16,13 +18,6 @@ interface IPostData {
     firstName: string;
     phone: string;
     birthDate: string | null;
-}
-
-interface IApiResponse {
-    readonly scenarioSuccess: boolean;
-    readonly systemSuccess: boolean;
-    readonly result: string;
-    readonly payload: string | null;
 }
 
 const phoneRe = /^(\+7)\d{10}$/;

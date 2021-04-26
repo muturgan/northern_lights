@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es2020",
+    "rootDir": "./src/front",
+    "outDir": "./static/js/generated",
+    "resolveJsonModule": false,
+    "noUnusedLocals": true
+  },
+  "exclude": ["src/config/*", "src/promo/**/*", "src/app.module.ts", "src/main.ts"],
+  "include": ["src/front/*.ts"]
+}
+    

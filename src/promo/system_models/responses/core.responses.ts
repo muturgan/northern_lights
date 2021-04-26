@@ -1,40 +1,7 @@
+import { IApiResponse, IScenarioFail, IScenarioSuccess, ISystemErrorResponse } from './typings';
+
 import { DEFAULT_ERROR_MESSAGE } from '../constants';
 import { ScenarioError, SystemError } from '../errors';
-
-//  *********************************
-//  *                               *
-//  *          Inderfaces           *
-//  *                               *
-//  *********************************
-
-export interface IApiResponse {
-    readonly scenarioSuccess: boolean;
-    readonly systemSuccess: boolean;
-    readonly result: string;
-    readonly payload: string | null;
-}
-
-export interface IScenarioSuccess extends IApiResponse {
-    readonly scenarioSuccess: true;
-    readonly systemSuccess: true;
-}
-
-export interface IScenarioFail extends IApiResponse {
-    readonly scenarioSuccess: false;
-    readonly systemSuccess: true;
-}
-
-export interface ISystemErrorResponse extends IApiResponse {
-    readonly scenarioSuccess: false;
-    readonly systemSuccess: false;
-}
-
-
-//  *********************************
-//  *                               *
-//  *            Models             *
-//  *                               *
-//  *********************************
 
 export class ApiResponse implements IApiResponse {
     constructor(
