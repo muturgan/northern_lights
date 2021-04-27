@@ -7,6 +7,10 @@
     width: 40px;
     height: 40px;
 }
+.check-button .lds-dual-ring {
+    left: 65px;
+}
+
 .lds-dual-ring:after {
     content: " ";
     display: none;
@@ -27,10 +31,10 @@
     }
 }
 
-.promo-button.disabled .lds-dual-ring {
+.promo-button.fetching.disabled .lds-dual-ring {
     display: inline-block;
 }
-.promo-button.disabled .lds-dual-ring:after {
+.promo-button.fetching.disabled .lds-dual-ring:after {
     display: block;
 }
 /* LOADER */
@@ -81,6 +85,17 @@
 
 .promo-button:disabled {
     color: #1e73be;
+}
+
+.check-button {
+    width: 160px;
+}
+
+.check-button-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .required {

@@ -2,38 +2,49 @@ import { IApiResponse } from '../promo/system_models/responses/typings';
 
 (() => {
 
-const firstNameInput = document.body.querySelector('#promo-input-firstname') as HTMLInputElement | null;
+const promoInput = document.body.querySelector('#promo-input-promo') as HTMLInputElement | null;
 const phoneInput = document.body.querySelector('#promo-input-phone') as HTMLInputElement | null;
-const birthDateInput = document.body.querySelector('#promo-input-birthdate') as HTMLInputElement | null;
 const output = document.body.querySelector('#promo-output') as HTMLOutputElement | null;
-const button = document.body.querySelector('.promo-button') as HTMLButtonElement | null;
+const checkButton = document.body.querySelector('#check-button-check') as HTMLButtonElement | null;
+const activateButton = document.body.querySelector('#check-button-activate') as HTMLButtonElement | null;
 
-if (firstNameInput === null || phoneInput === null || birthDateInput === null || output === null || button === null) {
+if (promoInput === null || phoneInput === null || output === null || checkButton === null || activateButton === null) {
     throw new Error('incomplete html');
 }
 
-const URL = 'api/registration';
+const CHECK_URL = 'api/check';
+const ACTIVATE_URL = 'api/activate';
 
 interface IPostData {
-    firstName: string;
+    promocode: string;
     phone: string;
-    birthDate: string | null;
 }
 
 const phoneRe = /^(\+7)\d{10}$/;
 const cleanupRe = /\s+|-|\(|\)/g;
-const dateStrRe = /^\d{4}-\d{2}-\d{2}$/;
+const promoRe = new RegExp(`^[абвгдежзиклмнопрстуфхцчшэюя]+$`);
 
 const postData: IPostData = {
-    firstName: '',
+    promocode: '',
     phone: '',
-    birthDate: null,
 };
 
-const checkFirstName = (firstName: string): string | null => {
-    const valid = typeof firstName === 'string' && firstName.length > 0;
-    postData.firstName = valid === true ? firstName : '';
-    return valid === true ? null : 'Имя обязательно для ввода';
+const checkPromo = (promo: string): string | null => {
+    const trimed = promo.replace(cleanupRe, '');
+    if (trimed.length === 0) {
+        postData.promocode = '';
+        return 'Промокод обязателен для ввода';
+    }
+    if (trimed.length < 5 || trimed.length > 8) {
+        postData.promocode = '';
+        return 'Вы ввели некорректный промокод';
+    }
+
+    const valid = promoRe.test(trimed);
+
+    postData.promocode = valid === true ? trimed : '';
+
+    return valid === true ? null : 'Вы ввели некорректный промокод';
 };
 
 const checkPhone = (phone: string): string | null => {
@@ -52,45 +63,25 @@ const checkPhone = (phone: string): string | null => {
     return valid === true ? null : 'Вы указали некорректный номер телефона';
 };
 
-const checkBirthDate = (birthDate: string): string | null => {
-    const isString = typeof birthDate === 'string';
-    if (isString !== true) {
-        postData.birthDate = null;
-        return 'DATE';
-    }
-
-    const trimed = birthDate.trim();
-    if (trimed === '') {
-        postData.birthDate = null;
-        return null;
-    }
-
-    const valid = dateStrRe.test(trimed);
-
-    postData.birthDate = valid === true ? trimed : null;
-
-    return valid === true ? null : 'DATE';
-};
-
 const blockWorkspace = () => {
-    button.disabled = true;
-    firstNameInput.disabled = true;
+    checkButton.disabled = true;
+    activateButton.disabled = true;
+    promoInput.disabled = true;
     phoneInput.disabled = true;
-    birthDateInput.disabled = true;
-    button.classList.add('disabled');
-    button.classList.add('fetching');
+    checkButton.classList.add('disabled');
+    activateButton.classList.add('disabled');
 };
 
 const unblockWorkspace = () => {
-    firstNameInput.disabled = false;
+    promoInput.disabled = false;
     phoneInput.disabled = false;
-    birthDateInput.disabled = false;
-    button.disabled = false;
-    button.classList.remove('disabled');
-    button.classList.remove('fetching');
+    checkButton.disabled = false;
+    activateButton.disabled = false;
+    checkButton.classList.remove('disabled');
+    activateButton.classList.remove('disabled');
 };
 
-const handleApiResponse = (res: IApiResponse) => {
+const handleApiResponse = (res: IApiResponse, btnElem: HTMLButtonElement) => {
     setTimeout(() => {
         output.innerText = res.result;
         switch (true) {
@@ -118,15 +109,15 @@ const handleApiResponse = (res: IApiResponse) => {
                 output.classList.remove('error');
         }
 
-        postData.firstName = '';
+        postData.promocode = '';
         postData.phone = '';
-        postData.birthDate = null;
 
         unblockWorkspace();
+        btnElem.classList.remove('fetching');
     }, 1000);
 };
 
-const handleApiError = (err: unknown) => {
+const handleApiError = (err: unknown, btnElem: HTMLButtonElement) => {
     console.log('api error:');
     console.log(err);
     setTimeout(() => {
@@ -135,11 +126,11 @@ const handleApiError = (err: unknown) => {
         output.classList.remove('warning');
         output.classList.add('error');
 
-        postData.firstName = '';
+        postData.promocode = '';
         postData.phone = '';
-        postData.birthDate = null;
 
         unblockWorkspace();
+        btnElem.classList.remove('fetching');
     }, 1000);
 };
 
@@ -151,28 +142,29 @@ const handleNot200 = async (status: number, statusText: string, res: Promise<str
     throw body;
 };
 
-const fetchData = () => {
+const fetchData = (url: string, btnElem: HTMLButtonElement) => {
     blockWorkspace();
+    btnElem.classList.add('fetching');
+
     const reqOptions = {
         method: 'post',
         body: JSON.stringify(postData),
         headers: {'Content-Type': 'application/json'},
     };
-    fetch(URL, reqOptions)
+    fetch(url, reqOptions)
         .then((raw) => {
             return raw.ok === true
                 ? raw.json()
                 : handleNot200(raw.status, raw.statusText, raw.text());
         })
-        .then(handleApiResponse)
-        .catch(handleApiError);
+        .then((res) => handleApiResponse(res, btnElem))
+        .catch((err) => handleApiError(err, btnElem));
 };
 
-button.addEventListener('click', () => {
+checkButton.addEventListener('click', () => {
     const validationResults = [
-        checkFirstName(firstNameInput.value),
+        checkPromo(promoInput.value),
         checkPhone(phoneInput.value),
-        checkBirthDate(birthDateInput.value),
     ];
 
     const errors = validationResults.filter((r) => r !== null) as string[];
@@ -185,7 +177,27 @@ button.addEventListener('click', () => {
         output.classList.remove('error');
     }
     else {
-        fetchData();
+        fetchData(CHECK_URL, checkButton);
+    }
+});
+
+activateButton.addEventListener('click', () => {
+    const validationResults = [
+        checkPromo(promoInput.value),
+        checkPhone(phoneInput.value),
+    ];
+
+    const errors = validationResults.filter((r) => r !== null) as string[];
+
+    if (errors.length > 0) {
+        const errorMessage = errors.join('; ');
+        output.innerText = errorMessage;
+        output.classList.remove('info');
+        output.classList.add('warning');
+        output.classList.remove('error');
+    }
+    else {
+        fetchData(ACTIVATE_URL, activateButton);
     }
 });
 
