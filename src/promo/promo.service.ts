@@ -43,12 +43,7 @@ export class PromoService
    public async registerNewUser(firstName: string, phone: string, birthDate: Date | null): Promise<IApiResponse> {
       return getManager().transaction<IApiResponse>(async (trx) => {
          const userId = await this._insertNewUser(firstName, phone, birthDate, trx)
-            .catch((err) => {
-               if (err instanceof QueryFailedError && (err as any).errno === 1062 && (err as any).sqlMessage.includes(`for key 'phone'`)) {
-                  throw new UserAlreadyExistsError(phone);
-               }
-               throw err;
-            });
+            .catch((err) => this._checkUserDuplicationError(err, phone));
 
          const promocode = await this._grantPromo(userId, trx);
          return new UserRegisteredResponse(promocode);
@@ -127,5 +122,19 @@ export class PromoService
       }
       const promocode = chars.join('');
       return promocode;
+   }
+
+   private _checkUserDuplicationError(err: unknown, phone: string): never {
+      if (
+         err instanceof QueryFailedError
+         && (err as any).errno === 1062 // ER_DUP_ENTRY
+         && (
+            (err as any).sqlMessage.includes(`for key 'phone'`)
+            || (err as any).sqlMessage.includes(`for key '${User.TABLE_NAME}.phone'`)
+         )
+      ) {
+         throw new UserAlreadyExistsError(phone);
+      }
+      throw err;
    }
 }
