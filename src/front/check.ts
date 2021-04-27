@@ -30,7 +30,7 @@ const postData: IPostData = {
 };
 
 const checkPromo = (promo: string): string | null => {
-    const trimed = promo.replace(cleanupRe, '');
+    const trimed = promo.replace(cleanupRe, '').toLowerCase();
     if (trimed.length === 0) {
         postData.promocode = '';
         return 'Промокод обязателен для ввода';
