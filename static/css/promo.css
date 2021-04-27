@@ -147,7 +147,7 @@ form.promo-form p input:disabled {
     align-items: center;
 }
 
-@media screen and (min-width: 390px) {
+@media screen and (max-width: 390px) {
     #promo-output {
         height: 65px;
     }
