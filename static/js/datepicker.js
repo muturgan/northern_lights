@@ -244,6 +244,7 @@ const picker = {
 
 window.addEventListener("load", function(){
   picker.attach({
-    target: "promo-input-birthdate"
+    target: "promo-input-birthdate",
+    startmon: true // WEEK START ON MON
   });
 });
