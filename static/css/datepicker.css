@@ -53,7 +53,7 @@
   }
   /* BLANK DATES */
   .picker-d-b {
-    background: #4e4e4e;
+    background: lightgray !important;
   }
   /* TODAY */
   .picker-d-td {
@@ -66,6 +66,7 @@
   }
   /* UNPICKABLE DATES */
   .picker-d-dd {
-    color: #888;
-    background: #4e4e4e;
+    /* color: #4e4e4e !important; */
+    background: lightgray !important;
+    cursor: default !important;
   }
