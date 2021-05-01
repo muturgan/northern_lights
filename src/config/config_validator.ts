@@ -3,29 +3,15 @@ import { IsBoolean, IsInt, IsIP, IsNotEmpty, IsString, ValidateNested, validateS
 
 import { IAppConfig } from './typings';
 
-export class DbExtra {
-    @IsString()
-    @IsNotEmpty()
-    public readonly timezone!: string;
-}
-
 export class DbConfig
 {
     @IsString()
     @IsNotEmpty()
-    public readonly database!: string;
+    public readonly type!: string;
 
     @IsString()
     @IsNotEmpty()
     public readonly host!: string;
-
-    @IsBoolean()
-    @IsNotEmpty()
-    public readonly logging!: boolean;
-
-    @IsString()
-    @IsNotEmpty()
-    public readonly password!: string;
 
     @IsInt()
     @IsNotEmpty()
@@ -33,16 +19,27 @@ export class DbConfig
 
     @IsString()
     @IsNotEmpty()
-    public readonly type!: string;
+    public readonly username!: string;
 
     @IsString()
     @IsNotEmpty()
-    public readonly username!: string;
+    public readonly password!: string;
 
-    @ValidateNested()
-    @Type(() => DbExtra)
+    @IsString()
     @IsNotEmpty()
-    public readonly extra!: DbExtra;
+    public readonly database!: string;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    public readonly synchronize!: boolean;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    public readonly logging!: boolean;
+
+    @IsString()
+    @IsNotEmpty()
+    public readonly timezone!: string;
 }
 
 

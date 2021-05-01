@@ -17,8 +17,9 @@ export const configFactory: ConfigFactory<IAppConfig> = () => {
             username: ormconfig.username,
             password: ormconfig.password,
             database: ormconfig.database,
+            synchronize: ormconfig.synchronize,
             logging: ormconfig.logging,
-            extra: ormconfig.extra,
+            timezone: ormconfig.timezone,
         },
     };
 

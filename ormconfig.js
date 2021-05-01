@@ -15,16 +15,14 @@ const options = {
     password: parsed.DB_PASS,
     database: parsed.DB_NAME,
     autoLoadEntities: false,
-    synchronize: false,
+    synchronize: parsed.DB_SYNC === 'true',
     logging: parsed.DB_LOG === 'true',
+    timezone: parsed.DB_TIME,
     migrations: [
         `./dist/promo/dal/migrations/*`
     ],
     cli: {
         "migrationsDir": `src/promo/dal/migrations`,
-    },
-    extra: {
-        timezone: parsed.DB_TIME,
     },
 };
 
