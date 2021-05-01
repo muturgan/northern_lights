@@ -3,7 +3,11 @@ import { IApiResponse, IScenarioFail, IScenarioSuccess, ISystemErrorResponse } f
 import { DEFAULT_ERROR_MESSAGE } from '../constants';
 import { ScenarioError, SystemError } from '../errors';
 
+const SECRET_SYMBOL = Symbol('SECRET_SYMBOL');
+
 export class ApiResponse implements IApiResponse {
+    // @ts-ignore
+    private readonly [SECRET_SYMBOL]: unknown;
     constructor(
         public readonly scenarioSuccess: boolean,
         public readonly systemSuccess: boolean,

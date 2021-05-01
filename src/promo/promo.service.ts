@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, getManager, QueryFailedError, Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
-import { IApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnknownError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
+import { ApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnknownError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
 import { ALPHABET, ALPHABET_LENGTH } from './validation';
 
 interface ICheckResult {
@@ -40,8 +40,8 @@ export class PromoService
    //  *                               *
    //  *********************************
 
-   public async registerNewUser(firstName: string, phone: string, birthDate: Date | null): Promise<IApiResponse> {
-      return getManager().transaction<IApiResponse>(async (trx) => {
+   public async registerNewUser(firstName: string, phone: string, birthDate: Date | null): Promise<ApiResponse> {
+      return getManager().transaction<ApiResponse>(async (trx) => {
          const userId = await this._insertNewUser(firstName, phone, birthDate, trx)
             .catch((err) => this._checkUserDuplicationError(err, phone));
 
@@ -50,7 +50,7 @@ export class PromoService
       });
    }
 
-   public async checkPromo(userPhone: string, promocode: string): Promise<IApiResponse> {
+   public async checkPromo(userPhone: string, promocode: string): Promise<ApiResponse> {
       const promos: ICheckResult[] = await this._promoRepository.query(
          `SELECT promocode, phone, activated_at FROM promo P
             INNER JOIN users U ON P.holder_id = U.ID
@@ -69,7 +69,7 @@ export class PromoService
       return new PromoValidResponse();
    }
 
-   public async activatePromo(userPhone: string, promocode: string): Promise<IApiResponse> {
+   public async activatePromo(userPhone: string, promocode: string): Promise<ApiResponse> {
       const result = await this.checkPromo(userPhone, promocode);
 
       if ((result instanceof PromoValidResponse) === false) {
