@@ -1,7 +1,8 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseFilters, UsePipes } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
 
 import { PromoService } from './promo.service';
 import { PromoValidationPipe } from './providers';
+import { JusticeInterceptor } from './providers/justice.interceptor';
 import { PromoExceptionFilter } from './providers/promo.error.filter';
 import { IApiResponse } from './system_models';
 import { PromoDto, RegistrationDto } from './validation';
@@ -19,6 +20,7 @@ export class PromoController
    ) {}
 
 
+   @UseInterceptors(new JusticeInterceptor())
    @Post('registration')
    @HttpCode(HttpStatus.OK)
    public async register(@Body() body: RegistrationDto): Promise<IApiResponse>

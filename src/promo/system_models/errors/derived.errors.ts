@@ -6,3 +6,9 @@ export class UserAlreadyExistsError extends ScenarioError {
         super(message, phone);
     }
 }
+
+export class JusticeError extends ScenarioError {
+    constructor() {
+        super('Илья, переведи гонорар...');
+    }
+}
