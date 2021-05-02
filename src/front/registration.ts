@@ -1,4 +1,4 @@
-import { IApiResponse } from '../promo/system_models/responses/typings';
+import { EScenarioStatus, IApiResponse } from '../promo/system_models/responses/typings';
 
 (() => {
 
@@ -93,20 +93,20 @@ const unblockWorkspace = () => {
 const handleApiResponse = (res: IApiResponse) => {
     setTimeout(() => {
         output.innerText = res.result;
-        switch (true) {
-            case res.scenarioSuccess === true && res.systemSuccess === true:
+        switch (res.status) {
+            case EScenarioStatus.SCENARIO_SUCCESS:
                 output.classList.add('info');
                 output.classList.remove('warning');
                 output.classList.remove('error');
                 break;
 
-            case res.scenarioSuccess === false && res.systemSuccess === true:
+            case EScenarioStatus.SCENARIO_FAIL:
                 output.classList.remove('info');
                 output.classList.add('warning');
                 output.classList.remove('error');
                 break;
 
-            case res.systemSuccess === false:
+            case EScenarioStatus.SYSTEM_ERROR:
                 output.classList.remove('info');
                 output.classList.remove('warning');
                 output.classList.add('error');

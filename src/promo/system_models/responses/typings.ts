@@ -1,21 +1,22 @@
+export const enum EScenarioStatus {
+    SCENARIO_SUCCESS,
+    SCENARIO_FAIL,
+    SYSTEM_ERROR,
+}
 export interface IApiResponse {
-    readonly scenarioSuccess: boolean;
-    readonly systemSuccess: boolean;
+    readonly status: EScenarioStatus;
     readonly result: string;
     readonly payload: string | null;
 }
 
 export interface IScenarioSuccess extends IApiResponse {
-    readonly scenarioSuccess: true;
-    readonly systemSuccess: true;
+    readonly status: EScenarioStatus.SCENARIO_SUCCESS;
 }
 
 export interface IScenarioFail extends IApiResponse {
-    readonly scenarioSuccess: false;
-    readonly systemSuccess: true;
+    readonly status: EScenarioStatus.SCENARIO_FAIL;
 }
 
 export interface ISystemErrorResponse extends IApiResponse {
-    readonly scenarioSuccess: false;
-    readonly systemSuccess: false;
+    readonly status: EScenarioStatus.SYSTEM_ERROR;
 }
