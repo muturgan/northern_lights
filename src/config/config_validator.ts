@@ -1,71 +1,33 @@
-import { plainToClass, Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsIP, IsNotEmpty, IsString, ValidateNested, validateSync } from 'class-validator';
+import Validator, { ValidationSchema } from 'fastest-validator';
 
 import { IAppConfig } from './typings';
 
-export class DbConfig
-{
-    @IsString()
-    @IsNotEmpty()
-    public readonly type!: string;
+const v = new Validator();
 
-    @IsString()
-    @IsNotEmpty()
-    public readonly host!: string;
+const schema: ValidationSchema<IAppConfig> = {
+    APP_HOST: 'string',
+    APP_PORT: { type: 'number', positive: true, integer: true },
+    DB_CONFIG: {
+        $$type: 'object',
+        type: 'string',
+        host: 'string',
+        port: { type: 'number', positive: true, integer: true },
+        username: 'string',
+        password: 'string',
+        database: 'string',
+        synchronize: 'boolean',
+        logging: 'boolean',
+        timezone: 'string',
+    },
+};
 
-    @IsInt()
-    @IsNotEmpty()
-    public readonly port!: number;
+const check = v.compile(schema);
 
-    @IsString()
-    @IsNotEmpty()
-    public readonly username!: string;
-
-    @IsString()
-    @IsNotEmpty()
-    public readonly password!: string;
-
-    @IsString()
-    @IsNotEmpty()
-    public readonly database!: string;
-
-    @IsBoolean()
-    @IsNotEmpty()
-    public readonly synchronize!: boolean;
-
-    @IsBoolean()
-    @IsNotEmpty()
-    public readonly logging!: boolean;
-
-    @IsString()
-    @IsNotEmpty()
-    public readonly timezone!: string;
-}
-
-
-export class AppConfig implements IAppConfig
-{
-    @IsIP()
-    @IsNotEmpty()
-    public readonly APP_HOST!: string;
-
-    @IsInt()
-    @IsNotEmpty()
-    public readonly APP_PORT!: number;
-
-    @ValidateNested()
-    @Type(() => DbConfig)
-    @IsNotEmpty()
-    public readonly DB_CONFIG!: DbConfig;
-}
-
-
-export function validateConfig(config: Record<string, any>): IAppConfig {
-    const parsedConfig = plainToClass(AppConfig, config);
-    const errors = validateSync(parsedConfig);
-
-    if (errors.length > 0) {
-        throw new Error(errors.toString());
+export function validateConfig(config: Record<string, any>): config is IAppConfig {
+    const result = check(config);
+    if (result !== true) {
+        const message = result.map((er) => er.message).join('; ');
+        throw new Error('App config validation failed: ' + message);
     }
-    return parsedConfig;
+    return result;
 }

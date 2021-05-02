@@ -37,6 +37,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "dotenv": "^8.2.0",
+    "fastest-validator": "^1.10.1",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
