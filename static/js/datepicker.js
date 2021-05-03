@@ -11,6 +11,7 @@ const picker = {
     var dp = document.createElement("div");
     dp.dataset.target = opt.target;
     dp.dataset.startmon = opt.startmon ? "1" : "0";
+    dp.dataset.disableFuture = opt.disableFuture === true;
     dp.classList.add("picker");
     if (opt.disableday) {
       dp.dataset.disableday = JSON.stringify(opt.disableday);
@@ -88,11 +89,13 @@ const picker = {
       var target = document.getElementById(opt.target);
       target.dataset.dp = uniqueID;
       target.readOnly = true; // Prevent onscreen keyboar on mobile devices
-      target.onfocus = function () {
+      target.onfocus = function (onfocus) {
+        console.log(onfocus);
         wrapper.classList.add("show");
         addEventListener('keydown', escListener);
       };
       wrapper.addEventListener("click", function (evt) {
+        console.log(evt);
         if (evt.target.classList.contains("picker-wrap")) {
           this.classList.remove("show");
           removeEventListener('keydown', escListener);
@@ -147,6 +150,7 @@ const picker = {
       var thisday = startDay;
       for (var i=1; i<=daysInMonth; i++) {
         // CHECK IF DAY IS DISABLED
+        console.log({thisday});
         var disabled = disableday.includes(thisday);
         // DAY OF MONTH, DISABLED
         squares.push([i, disabled]); 
@@ -190,6 +194,7 @@ const picker = {
     for (var i=0; i<total; i++) {
       if (i!=total && i%7==0) { row = table.insertRow(); }
       cell = row.insertCell();
+      console.log({year, squares: squares[i]});
       if (squares[i] == "B") { 
         cell.classList.add("picker-d-b"); 
       } else { 
@@ -245,6 +250,7 @@ const picker = {
 window.addEventListener("load", function(){
   picker.attach({
     target: "promo-input-birthdate",
+    disableday : [2, 7], // DISABLE TUE, SUN
     startmon: true // WEEK START ON MON
   });
 });
