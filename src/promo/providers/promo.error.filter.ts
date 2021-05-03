@@ -3,7 +3,7 @@ import { FastifyReply } from 'fastify';
 
 import { PromoValidationPipe } from './promo.validation.pipe';
 
-import { IApiResponse, ScenarioError, ScenarioFailResponse, SystemError, SystemErrorResponse, UnknownError, ValidationErrorResponse } from '../system_models';
+import { IApiResponse, NestValidationErrorResponse, ScenarioError, ScenarioFailResponse, SystemError, SystemErrorResponse, UnknownError } from '../system_models';
 
 
 
@@ -28,7 +28,7 @@ export class PromoExceptionFilter implements ExceptionFilter
       }
 
       else if (exception instanceof BadRequestException && exception.stack?.includes(PromoValidationPipe.name)) {
-         response = new ValidationErrorResponse(exception);
+         response = new NestValidationErrorResponse(exception);
       }
 
       else if (exception instanceof HttpException) {

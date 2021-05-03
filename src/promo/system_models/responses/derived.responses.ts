@@ -55,7 +55,7 @@ export class PromoAlreadyActivatedResponse extends ScenarioFailResponse {
 }
 
 
-export class ValidationErrorResponse extends ScenarioFailResponse {    
+export class NestValidationErrorResponse extends ScenarioFailResponse {    
     constructor(err: BadRequestException) {
         interface IValidationErrorBody {
             statusCode: number;
@@ -68,6 +68,14 @@ export class ValidationErrorResponse extends ScenarioFailResponse {
         body.message.forEach((m) => messageObj[m] = null);
         const messageToShow = Object.keys(messageObj).join('; ');
 
+        super(messageToShow);
+    }
+}
+
+export class ValidationErrorResponse extends ScenarioFailResponse {    
+    constructor(messages: string | string[]) {
+        const messagesArr = Array.isArray(messages) ? messages : [messages];
+        const messageToShow = messagesArr.join('; ');
         super(messageToShow);
     }
 }

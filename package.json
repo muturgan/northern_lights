@@ -43,7 +43,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.7",
     "tslib": "^2.2.0",
-    "typeorm": "^0.2.32"
+    "typeorm": "^0.2.32",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v19.2.0"
   },
   "devDependencies": {
     "@nestjs/serve-static": "^2.1.4",
