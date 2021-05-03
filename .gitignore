@@ -4,6 +4,9 @@ mysql
 # generated static files
 static/js/generated
 
+# gzip
+*.gz
+
 # Logs
 logs
 *.log
