@@ -3,6 +3,7 @@ import { isDateString, IsNotEmpty, IsOptional, IsString, registerDecorator, Vali
 import { PhoneDto } from './phone.dto';
 
 const NAME_ERROR_MESSAGE = 'Введено некорректное имя';
+const shortDateRe = /^\d{4}-\d{2}-\d{2}$/; // YYYY-MM-DD
 
 
 function IsValidDate(validationOptions?: ValidationOptions): (object: Object, propertyName: string) => void {
@@ -19,14 +20,13 @@ function IsValidDate(validationOptions?: ValidationOptions): (object: Object, pr
                     }
                     const trimed = value.trim();
 
-                    const valid = isDateString(trimed, {strict: true});
+                    const valid = isDateString(trimed, {strict: true}) && shortDateRe.test(trimed);
                     if (valid !== true) {
                         return false;
                     }
 
-                    const date = new Date(trimed);
                     // @ts-ignore
-                    args.object[args.property] = date;
+                    args.object[args.property] = trimed;
         
                     return valid;
                 },
@@ -42,5 +42,5 @@ export class RegistrationDto extends PhoneDto {
 
     @IsValidDate({message: 'Введена некорректная дата рождения'})
     @IsOptional()
-    public readonly birthDate: Date | null = null;
+    public readonly birthDate: string | null = null;
 }
