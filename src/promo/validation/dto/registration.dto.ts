@@ -1,4 +1,4 @@
-import { isDateString, IsNotEmpty, IsOptional, IsString, registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator';
+import { isDateString, IsNotEmpty, IsString, registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator';
 
 import { PhoneDto } from './phone.dto';
 
@@ -41,6 +41,6 @@ export class RegistrationDto extends PhoneDto {
     public readonly firstName!: string;
 
     @IsValidDate({message: 'Введена некорректная дата рождения'})
-    @IsOptional()
-    public readonly birthDate: string | null = null;
+    @IsNotEmpty()
+    public readonly birthDate!: string;
 }

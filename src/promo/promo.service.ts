@@ -40,7 +40,7 @@ export class PromoService
    //  *                               *
    //  *********************************
 
-   public async registerNewUser(firstName: string, phone: string, birthDate: string | null): Promise<ApiResponse> {
+   public async registerNewUser(firstName: string, phone: string, birthDate: string): Promise<ApiResponse> {
       return getManager().transaction<ApiResponse>(async (trx) => {
          const userId = await this._insertNewUser(firstName, phone, birthDate, trx)
             .catch((err) => this._checkUserDuplicationError(err, phone));
@@ -94,7 +94,7 @@ export class PromoService
    //  *                               *
    //  *********************************
 
-   private async _insertNewUser(firstname: string, phone: string, birthdate: string | null, trx: EntityManager): Promise<string> {
+   private async _insertNewUser(firstname: string, phone: string, birthdate: string, trx: EntityManager): Promise<string> {
       const entity = this._userRepository.create({
          firstname,
          phone,

@@ -15,8 +15,8 @@ export class User
     @Column({ type: 'varchar', length: 32, nullable: false })
     public firstname!: string;
 
-    @Column({ type: 'date', nullable: true, default: null })
-    public birthdate!: string | null; // YYYY-MM-DD
+    @Column({ type: 'date', nullable: false })
+    public birthdate!: string; // YYYY-MM-DD
 
     @Column({ type: 'char', length: 12, nullable: false, unique: true })
     public phone!: string;

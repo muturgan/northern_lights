@@ -17,7 +17,7 @@ const URL = 'api/registration';
 interface IPostData {
     firstName: string;
     phone: string;
-    birthDate: string | null;
+    birthDate: string;
 }
 
 const phoneRe = /^(\+7)\d{10}$/;
@@ -27,7 +27,7 @@ const dateStrRe = /^\d{4}-\d{2}-\d{2}$/;
 const postData: IPostData = {
     firstName: '',
     phone: '',
-    birthDate: null,
+    birthDate: '',
 };
 
 const checkFirstName = (firstName: string): string | null => {
@@ -55,21 +55,21 @@ const checkPhone = (phone: string): string | null => {
 const checkBirthDate = (birthDate: string): string | null => {
     const isString = typeof birthDate === 'string';
     if (isString !== true) {
-        postData.birthDate = null;
-        return 'DATE';
+        postData.birthDate = '';
+        return 'Дата рождения обязательна для ввода';
     }
 
     const trimed = birthDate.trim();
     if (trimed === '') {
-        postData.birthDate = null;
-        return null;
+        postData.birthDate = '';
+        return 'Дата рождения обязательна для ввода';
     }
 
     const valid = dateStrRe.test(trimed);
 
-    postData.birthDate = valid === true ? trimed : null;
+    postData.birthDate = valid === true ? trimed : '';
 
-    return valid === true ? null : 'DATE';
+    return valid === true ? null : 'Вы ввели некорректную дату рождения';
 };
 
 const blockWorkspace = () => {
@@ -120,7 +120,7 @@ const handleApiResponse = (res: IApiResponse) => {
 
         postData.firstName = '';
         postData.phone = '';
-        postData.birthDate = null;
+        postData.birthDate = '';
 
         unblockWorkspace();
     }, 1000);
@@ -137,7 +137,7 @@ const handleApiError = (err: unknown) => {
 
         postData.firstName = '';
         postData.phone = '';
-        postData.birthDate = null;
+        postData.birthDate = '';
 
         unblockWorkspace();
     }, 1000);
