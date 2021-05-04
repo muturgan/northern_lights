@@ -60,8 +60,10 @@
     background: #d84f4f;
   }
   /* PICKABLE DATES */
+  .picker-d-d {
+    cursor: pointer !important;
+  }
   .picker-d-d:hover {
-    cursor: pointer;
     background: #a33c3c !important;
   }
   /* UNPICKABLE DATES */
