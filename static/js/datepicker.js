@@ -112,8 +112,8 @@ const picker = {
   draw : function (el) {
     // (B1) GET DATE PICKER COMPONENTS
     const parent = el.parentElement,
-        year = parent.getElementsByClassName("picker-y")[0].value,
-        month = parent.getElementsByClassName("picker-m")[0].value,
+        year = Number(parent.getElementsByClassName("picker-y")[0].value),
+        month = Number(parent.getElementsByClassName("picker-m")[0].value),
         days = parent.getElementsByClassName("picker-d")[0];
 
     // (B2) DATE RANGE CALCULATION - NOTE: UTC+0!
@@ -142,14 +142,14 @@ const picker = {
     // (B5) DAYS OF MONTH
     // (B5-2) SOME DAYS DISABLED
     const today = new Date(),
-      thisMonth = today.getUTCMonth(), // Note: Jan is 0
+      calculatedManth = today.getUTCMonth() + 1, // Note: Jan is 0
       thisYear = today.getUTCFullYear(),
       todayDay = today.getUTCDate();
 
     let thisday = startDay;
     for (let i=1; i<=daysInMonth; i++) {
       // CHECK IF DAY IS DISABLED
-      const disabled = disableday.includes(thisday) || (Number(year) === thisYear && Number(month) === thisMonth+1 && i > todayDay);
+      const disabled = disableday.includes(thisday) || (year >= thisYear && ((month === calculatedManth && i > todayDay) || month > calculatedManth));
       // DAY OF MONTH, DISABLED
       squares.push([i, disabled]); 
       // NEXT DAY
@@ -183,7 +183,7 @@ const picker = {
     // (B7-2) HTML DATE CELLS
     const total = squares.length;
     row = table.insertRow();
-    const todayDate = thisMonth+1 === Number(month) && thisYear === Number(year)
+    const todayDate = calculatedManth === month && thisYear === year
       ? todayDay
       : null;
     for (let i=0; i<total; i++) {
