@@ -195,7 +195,7 @@ const picker = {
         }
         // ALLOWED TO CHOOSE THIS DAY
         else {
-          if (i == todayDate) { cell.classList.add("picker-d-td"); }
+          // if (cell.innerHTML === String(todayDate)) { cell.classList.add("picker-d-td"); }
           cell.classList.add("picker-d-d");
           cell.addEventListener("click", function(){ picker.pick(this); });
         }
@@ -228,6 +228,13 @@ const picker = {
 
     // (C3) UPDATE SELECTED DATE
     document.getElementById(parent.dataset.target).value = fullDate;
+
+    // mark day as selected
+    const prevSelected = document.body.querySelector('.picker-d-td');
+    if (prevSelected !== null) {
+      prevSelected.classList.remove('picker-d-td');
+    }
+    el.classList.add('picker-d-td');
 
     // (C4) POPUP ONLY - CLOSE THE POPUP
     if (parent.dataset.popup == "1") {

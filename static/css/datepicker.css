@@ -56,9 +56,9 @@
   .picker-d-b {
     background: lightgray !important;
   }
-  /* TODAY */
+  /* TODAY or SELECTED DAY */
   .picker-d-td {
-    background: #d84f4f;
+    background: #d84f4f !important;
   }
   /* PICKABLE DATES */
   .picker-d-d {
