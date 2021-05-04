@@ -129,12 +129,14 @@ const picker = {
       ? JSON.parse(parent.dataset.disableday)
       : [];
 
+    const DISABLED_DAY = Symbol('DISABLED_DAY');
+
     // (B4) EMPTY SQUARES BEFORE FIRST DAY OF MONTH
     if (parent.dataset.startmon=="1" && startDay!=1) {
-      for (let i=1; i<startDay; i++) { squares.push("B"); }
+      for (let i=1; i<startDay; i++) { squares.push(DISABLED_DAY); }
     }
     if (parent.dataset.startmon=="0" && startDay!=7) {
-      for (let i=0; i<startDay; i++) { squares.push("B"); }
+      for (let i=0; i<startDay; i++) { squares.push(DISABLED_DAY); }
     }
 
     // (B5) DAYS OF MONTH
@@ -157,10 +159,10 @@ const picker = {
 
     // (B6) EMPTY SQUARES AFTER LAST DAY OF MONTH
     if (parent.dataset.startmon=="1" && endDay!=7) {
-      for (let i=endDay; i<7; i++) { squares.push("B"); }
+      for (let i=endDay; i<7; i++) { squares.push(DISABLED_DAY); }
     }
     if (parent.dataset.startmon=="0" && endDay!=6) {
-      for (let i=endDay; i<(endDay==7?13:6); i++) { squares.push("B"); }
+      for (let i=endDay; i<(endDay==7?13:6); i++) { squares.push(DISABLED_DAY); }
     }
 
     // (B7) DRAW HTML
@@ -187,7 +189,7 @@ const picker = {
     for (let i=0; i<total; i++) {
       if (i!=total && i%7==0) { row = table.insertRow(); }
       cell = row.insertCell();
-      if (squares[i] == "B") { 
+      if (squares[i] == DISABLED_DAY) { 
         cell.classList.add("picker-d-b"); 
       } else { 
         cell.innerHTML = squares[i][0]; 
