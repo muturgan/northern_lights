@@ -38,10 +38,10 @@ const picker = {
     dp.appendChild(select);
 
     // (A4) YEAR SELECT
-    var yRange = 10; // Year range to show, I.E. from thisYear-yRange to thisYear+yRange
+    var yRange = 70; // Year range to show, I.E. from thisYear-yRange to thisYear+yRange
     select = document.createElement("select");
     select.classList.add("picker-y");
-    for (var y = thisYear-yRange; y < thisYear+yRange; y++) {
+    for (let y = thisYear-yRange; y <= thisYear; y++) {
       option = document.createElement("option");
       option.value = y;
       option.text = y;
