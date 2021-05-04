@@ -7,6 +7,7 @@ static/js/generated
 # gzip
 *.gz
 *.webp
+*.avif
 
 # Logs
 logs
