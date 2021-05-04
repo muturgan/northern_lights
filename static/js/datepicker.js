@@ -129,7 +129,7 @@ const picker = {
       ? JSON.parse(parent.dataset.disableday)
       : [];
 
-    const DISABLED_DAY = Symbol('DISABLED_DAY');
+    const DISABLED_DAY = null;
 
     // (B4) EMPTY SQUARES BEFORE FIRST DAY OF MONTH
     if (parent.dataset.startmon=="1" && startDay!=1) {
@@ -183,7 +183,7 @@ const picker = {
     // (B7-2) HTML DATE CELLS
     const total = squares.length;
     row = table.insertRow();
-    const todayDate = thisMonth+1 == month && thisYear == year
+    const todayDate = thisMonth+1 === Number(month) && thisYear === Number(year)
       ? todayDay
       : null;
     for (let i=0; i<total; i++) {
