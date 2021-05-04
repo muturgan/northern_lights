@@ -1,6 +1,18 @@
 (() => {
 
 let escListener;
+let yearSelect;
+let monthSelect;
+let days;
+
+// (A2) DEFAULT TO CURRENT MONTH + YEAR - NOTE: UTC+0!
+const today = new Date(),
+  thisYear = today.getUTCFullYear(),
+  thisMonth = today.getUTCMonth(), // Note: Jan is 0
+  calculatedManth = today.getUTCMonth() + 1,
+  todayDay = today.getUTCDate();
+
+let disableday;
 
 const picker = {
   // (A) ATTACH DATEPICKER TO TARGET
@@ -14,52 +26,46 @@ const picker = {
     dp.dataset.target = opt.target;
     dp.dataset.startmon = opt.startmon ? "1" : "0";
     dp.classList.add("picker");
-    if (opt.disableday) {
-      dp.dataset.disableday = JSON.stringify(opt.disableday);
-    }
+    disableday = opt.disableday || [];
 
-    // (A2) DEFAULT TO CURRENT MONTH + YEAR - NOTE: UTC+0!
-    const today = new Date(),
-        thisMonth = today.getUTCMonth(), // Note: Jan is 0
-        thisYear = today.getUTCFullYear(),
-        months = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
+    const months = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
                   "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
 
     // (A3) MONTH SELECT
-    let select = document.createElement("select");
+    monthSelect = document.createElement("select");
     let option = null;
-    select.classList.add("picker-m");
+    monthSelect.classList.add("picker-m");
     for (let mth in months) {
       option = document.createElement("option");
       option.value = parseInt(mth) + 1;
       option.text = months[mth];
-      select.appendChild(option);
+      monthSelect.appendChild(option);
     }
-    select.selectedIndex = thisMonth;
-    select.addEventListener("change", function(){ picker.draw(this); });
-    dp.appendChild(select);
+    monthSelect.selectedIndex = thisMonth;
+    monthSelect.addEventListener("change", function(){ picker.draw(this); });
+    dp.appendChild(monthSelect);
 
     // (A4) YEAR SELECT
     const yRange = 70; // Year range to show, I.E. from thisYear-yRange to thisYear+yRange
-    select = document.createElement("select");
-    select.classList.add("picker-y");
+    yearSelect = document.createElement("select");
+    yearSelect.classList.add("picker-y");
     for (let y = thisYear-yRange; y <= thisYear; y++) {
       option = document.createElement("option");
       option.value = y;
       option.text = y;
-      select.appendChild(option);
+      yearSelect.appendChild(option);
     }
-    select.selectedIndex = yRange;
-    select.addEventListener("change", function(){ picker.draw(this); });
-    dp.appendChild(select);
+    yearSelect.selectedIndex = yRange;
+    yearSelect.addEventListener("change", function(){ picker.draw(this); });
+    dp.appendChild(yearSelect);
 
     // (A5) DAY SELECT
-    const days = document.createElement("div");
+    days = document.createElement("div");
     days.classList.add("picker-d");
     dp.appendChild(days);
 
     // (A6) ATTACH DATE PICKER TO TARGET CONTAINER + DRAW THE DATES
-    picker.draw(select);
+    picker.draw(yearSelect);
 
     // (A6-I) INLINE DATE PICKER
     if (opt.container) { document.getElementById(opt.container).appendChild(dp); }
@@ -112,23 +118,18 @@ const picker = {
   draw : function (el) {
     // (B1) GET DATE PICKER COMPONENTS
     const parent = el.parentElement,
-        year = Number(parent.getElementsByClassName("picker-y")[0].value),
-        month = Number(parent.getElementsByClassName("picker-m")[0].value),
-        days = parent.getElementsByClassName("picker-d")[0];
+        year = Number(yearSelect.value),
+        month = Number(monthSelect.value);
 
     // (B2) DATE RANGE CALCULATION - NOTE: UTC+0!
     const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
     let startDay = new Date(Date.UTC(year, month-1, 1)).getUTCDay(); // Note: Sun = 0
-    let endDay = new Date(Date.UTC(year, month-1, daysInMonth)).getUTCDay();
     startDay = startDay==0 ? 7 : startDay;
+    let endDay = new Date(Date.UTC(year, month-1, daysInMonth)).getUTCDay();
     endDay = endDay==0 ? 7 : endDay;
 
     // (B3) GENERATE DATE SQUARES (IN ARRAY FIRST)
     const squares = [];
-    const disableday = parent.dataset.disableday
-      ? JSON.parse(parent.dataset.disableday)
-      : [];
-
     const DISABLED_DAY = null;
 
     // (B4) EMPTY SQUARES BEFORE FIRST DAY OF MONTH
@@ -141,11 +142,6 @@ const picker = {
 
     // (B5) DAYS OF MONTH
     // (B5-2) SOME DAYS DISABLED
-    const today = new Date(),
-      calculatedManth = today.getUTCMonth() + 1, // Note: Jan is 0
-      thisYear = today.getUTCFullYear(),
-      todayDay = today.getUTCDate();
-
     let thisday = startDay;
     for (let i=1; i<=daysInMonth; i++) {
       // CHECK IF DAY IS DISABLED
@@ -221,14 +217,14 @@ const picker = {
     }
 
     // (C2) GET FULL SELECTED YEAR MONTH DAY
-    const year = parent.getElementsByClassName("picker-y")[0].value,
-        month = parent.getElementsByClassName("picker-m")[0].value,
-        day = el.innerHTML;
+    const year = yearSelect.value;
+    let month = monthSelect.value;
+    let day = el.innerHTML;
 
     // YYYY-MM-DD FORMAT - CHANGE FORMAT HERE IF YOU WANT !
     if (parseInt(month)<10) { month = "0" + month; }
     if (parseInt(day)<10) { day = "0" + day; }
-    const fullDate = year + "-" + month + "-" + day;
+    const fullDate = `${year}-${month}-${day}`;
 
     // (C3) UPDATE SELECTED DATE
     document.getElementById(parent.dataset.target).value = fullDate;
