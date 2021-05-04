@@ -13,6 +13,7 @@
   .picker-wrap.show {
     opacity: 1;
     visibility: visible;
+    z-index: 100500;
   }
   .picker-wrap .picker { 
     margin: 50vh auto 0 auto;
