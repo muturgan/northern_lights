@@ -5,7 +5,7 @@ import { ScenarioError, SystemError } from '../errors';
 
 const SECRET_SYMBOL = Symbol('SECRET_SYMBOL');
 
-export class ApiResponse implements IApiResponse {
+export abstract class ApiResponse implements IApiResponse {
     // @ts-ignore
     private readonly [SECRET_SYMBOL]: unknown;
     constructor(
