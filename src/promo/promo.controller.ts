@@ -1,5 +1,6 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseFilters, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseFilters, UsePipes } from '@nestjs/common';
 
+import { User } from './dal';
 import { PromoService } from './promo.service';
 import { PromoValidationPipe } from './providers';
 import { PromoExceptionFilter } from './providers/promo.error.filter';
@@ -40,6 +41,13 @@ export class PromoController
    public activate(@Body() body: PromoDto): Promise<IApiResponse>
    {
       return this._promoService.activatePromo(body.phone, body.promocode);
+   }
+
+   @Get('users')
+   @HttpCode(HttpStatus.OK)
+   public getUsersList(): Promise<User[]>
+   {
+      return this._promoService.getUsersList();
    }
 
 }

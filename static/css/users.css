@@ -1,0 +1,131 @@
+html {
+    margin: 0;
+    padding: 0;
+}
+
+html>body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+a {
+    font-size: 18px;
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    z-index: 100;
+}
+
+th, td {
+    border: 1px black solid;
+}
+
+/* LOADER */
+.lds-dual-ring {
+    position: absolute;
+    top: 2px;
+    left: 90px;
+    display: none;
+    width: 40px;
+    height: 40px;
+}
+.check-button .lds-dual-ring {
+    left: 65px;
+}
+
+.lds-dual-ring:after {
+    content: " ";
+    display: none;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    border-radius: 50%;
+    border: 6px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-dual-ring 1.7s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+
+.promo-button.fetching.disabled .lds-dual-ring {
+    display: inline-block;
+}
+.promo-button.fetching.disabled .lds-dual-ring:after {
+    display: block;
+}
+/* LOADER */
+
+
+.promo-button {
+    color: white;
+    background-color: #1e73be;
+    padding: 0;
+    border-radius: 4px;
+    outline: none;
+    position: relative;
+}
+
+.promo-button:focus {
+    outline: none;
+}
+.promo-button:focus-visible {
+    outline: 2px solid #96588a;
+}
+
+.promo-button:hover {
+    color: white;
+    background-color: #1e73be !important;
+    box-shadow: 0 0 15px 0 #57bfff;
+}
+
+.promo-button.disabled:hover {
+    box-shadow: none;
+}
+
+.promo-button:active {
+    color: white;
+    background-color: #1e73be !important;
+    box-shadow: none;
+    outline: none;
+}
+
+.promo-button span {
+    display: block;
+    margin: 10px 23px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.promo-button:disabled {
+    color: #1e73be;
+}
+
+.check-button {
+    width: 160px;
+}
+
+.check-button-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info {
+    box-shadow: 0 0 10px 0 green;
+}
+
+.warning {
+    box-shadow: 0 0 10px 0 darkorange;
+}
+
+.error {
+    box-shadow: 0 0 10px 0 red;
+}

@@ -87,6 +87,10 @@ export class PromoService
       return new PromoActivatedResponse();
    }
 
+   public getUsersList(): Promise<User[]> {
+      return this._userRepository.find({relations: ['promo'], order: {ID: 'ASC'}});
+   }
+
 
    //  *********************************
    //  *                               *

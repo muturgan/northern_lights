@@ -17,3 +17,23 @@ files.forEach((fileName) => {
     }
 });
 
+function removeJsFiles(rootPath) {
+    const entries = fs.readdirSync(rootPath);
+ 
+    entries.forEach((entry) => {
+        const entryPath = path.join(rootPath, entry);
+
+        if (entry.endsWith(JS_EXT)) {
+            fs.unlinkSync(entryPath);
+            return;
+        }
+
+        const stat = fs.statSync(entryPath);
+        if (stat.isDirectory()) {
+            removeJsFiles(entryPath);
+        }
+    });
+}
+
+const srcPath  = path.join(process.cwd(), 'src');
+removeJsFiles(srcPath);
