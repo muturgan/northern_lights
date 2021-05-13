@@ -40,7 +40,7 @@ export class PromoService
    //  *                               *
    //  *********************************
 
-   public async registerNewUser(firstName: string, phone: string, birthDate: string): Promise<ApiResponse> {
+   public registerNewUser(firstName: string, phone: string, birthDate: string): Promise<ApiResponse> {
       return getManager().transaction<ApiResponse>(async (trx) => {
          const userId = await this._insertNewUser(firstName, phone, birthDate, trx)
             .catch((err) => this._checkUserDuplicationError(err, phone));
