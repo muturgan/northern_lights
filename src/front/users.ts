@@ -23,7 +23,7 @@ interface IApiUser extends Omit<User, 'created_at'> {
                 + `<td>${ item.birthdate }</td>`
                 + `<td>${ item.created_at.split('T')[0] }</td>`
                 + `<td><ul>${
-                    item.promo.map((pr) => `<li><span>${ pr.promocode }${ pr.activated_at === null ? '' : '(активирован)'}</li>`)
+                    item.promo.map((pr) => `<li><span>${ pr.promocode }${ pr.activated_at === null ? '' : '<br>(активирован)'}</li>`)
                 }</ul></td>`;
             TBODY.append(tr);
         });
