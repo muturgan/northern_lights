@@ -1,5 +1,5 @@
 import type { User } from '../promo/dal';
-import { EAdminScenarioStatus, IAdminApiResponse } from '../promo/system_models';
+import { EScenarioStatus, IApiResponse } from '../promo/system_models';
 
 interface IApiUser extends Omit<User, 'created_at'> {
     created_at: string;
@@ -32,7 +32,7 @@ interface IApiUser extends Omit<User, 'created_at'> {
         });
     };
 
-    const fetchUsers = (): Promise<IAdminApiResponse<IApiUser[]>> => {
+    const fetchUsers = (): Promise<IApiResponse<IApiUser[]>> => {
         return fetch(USERS_URL, {headers: {authorization: pass}})
         .then((raw) => {
             if (raw.ok !== true) {
@@ -42,21 +42,21 @@ interface IApiUser extends Omit<User, 'created_at'> {
         });
     };
 
-    const handleAuthorized = (): Promise<IAdminApiResponse<IApiUser[]>> => {
+    const handleAuthorized = (): Promise<IApiResponse<IApiUser[]>> => {
         pass = prompt('Введите пароль') || '';
         return fetchUsers();
     };
 
-    const handleApiData = (data: IAdminApiResponse<IApiUser[]>): void => {
+    const handleApiData = (data: IApiResponse<IApiUser[]>): void => {
         switch (data.status) {
-            case EAdminScenarioStatus.SCENARIO_SUCCESS:
-                return render(data.payload);
+            case EScenarioStatus.SCENARIO_SUCCESS:
+                return render(data.payload as IApiUser[]);
 
-            case EAdminScenarioStatus.UNAUTHORIZED:
+            case EScenarioStatus.UNAUTHORIZED:
                 handleAuthorized().then(handleApiData);
                 return;
 
-            case EAdminScenarioStatus.SYSTEM_ERROR:
+            case EScenarioStatus.SYSTEM_ERROR:
                 throw new Error('Не удалось получить данные');
         
             default:

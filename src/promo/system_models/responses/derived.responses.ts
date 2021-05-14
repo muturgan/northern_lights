@@ -2,6 +2,8 @@ import { BadRequestException } from '@nestjs/common';
 
 import { ScenarioFailResponse, ScenarioSuccessResponse } from './core.responses';
 
+import type { User } from '../../dal';
+
 
 //  *********************************
 //  *                               *
@@ -25,6 +27,12 @@ export class PromoValidResponse extends ScenarioSuccessResponse {
 export class PromoActivatedResponse extends ScenarioSuccessResponse {    
     constructor() {
         super('Промокод успешно активирован');
+    }
+}
+
+export class UserListResponse extends ScenarioSuccessResponse<User[]> {    
+    constructor(users: User[]) {
+        super('Список пользователей', users);
     }
 }
 

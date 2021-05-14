@@ -3,7 +3,7 @@ import { FastifyReply } from 'fastify';
 
 import { PromoValidationPipe } from './promo.validation.pipe';
 
-import { IApiResponse, ScenarioError, ScenarioFailResponse, SystemError, SystemErrorResponse, UnknownError, ValidationErrorResponse } from '../system_models';
+import { IApiResponse, ScenarioError, ScenarioFailResponse, SystemError, SystemErrorResponse, UnauthorizedError, UnauthorizedResponse, UnknownError, ValidationErrorResponse } from '../system_models';
 
 
 
@@ -19,7 +19,11 @@ export class PromoExceptionFilter implements ExceptionFilter
       let response: IApiResponse | null = null;
       let unknownError: UnknownError | null = null;
 
-      if (exception instanceof ScenarioError) {
+      if (exception instanceof UnauthorizedError) {
+         response = UnauthorizedResponse.fromError(exception);
+      }
+
+      else if (exception instanceof ScenarioError) {
          response = ScenarioFailResponse.fromError(exception);
       }
 

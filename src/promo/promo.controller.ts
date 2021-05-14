@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Headers, HttpCode, HttpStatus, Post, UseFilters, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Headers, HttpCode, HttpStatus, Post, UseFilters, UseGuards, UsePipes } from '@nestjs/common';
 
 import { User } from './dal';
 import { PromoService } from './promo.service';
-import { PromoValidationPipe } from './providers';
+import { AuthGuard, PromoValidationPipe } from './providers';
 import { PromoExceptionFilter } from './providers/promo.error.filter';
-import { IAdminApiResponse, IApiResponse } from './system_models';
+import { IApiResponse } from './system_models';
 import { PromoDto, RegistrationDto } from './validation';
 
 
@@ -29,6 +29,7 @@ export class PromoController
 
 
    @Post('check')
+   @UseGuards(AuthGuard)
    @HttpCode(HttpStatus.OK)
    public check(@Body() body: PromoDto): Promise<IApiResponse>
    {
@@ -37,6 +38,7 @@ export class PromoController
 
 
    @Post('activate')
+   @UseGuards(AuthGuard)
    @HttpCode(HttpStatus.OK)
    public activate(@Body() body: PromoDto): Promise<IApiResponse>
    {
@@ -45,7 +47,7 @@ export class PromoController
 
    @Get('users')
    @HttpCode(HttpStatus.OK)
-   public getUsersList(@Headers('Authorization') authHeader?: string): Promise<IAdminApiResponse<User[]>>
+   public getUsersList(@Headers('Authorization') authHeader?: string): Promise<IApiResponse<User[]>>
    {
       return this._promoService.getUsersList(authHeader);
    }

@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, getManager, QueryFailedError, Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
-import { ApiResponse, EAdminScenarioStatus, IAdminApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnknownError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
+import { ApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnauthorizedError, UnknownError, UserAlreadyExistsError, UserListResponse, UserRegisteredResponse } from './system_models';
 import { ALPHABET, ALPHABET_LENGTH } from './validation';
 
 interface ICheckResult {
@@ -97,17 +97,11 @@ export class PromoService
       return new PromoActivatedResponse();
    }
 
-   public async getUsersList(authHeader?: string): Promise<IAdminApiResponse<User[]>> {
+   public async getUsersList(authHeader?: string): Promise<UserListResponse> {
       if (authHeader !== this._authHeader) {
-         return {
-            status: EAdminScenarioStatus.UNAUTHORIZED,
-            payload: [],
-         };
+         throw new UnauthorizedError();
       }
-      return this.findUsers().then((users) => ({
-         status: EAdminScenarioStatus.SCENARIO_SUCCESS,
-         payload: users,
-      }));
+      return this._findUsers().then((users) => new UserListResponse(users));
    }
 
 
@@ -161,7 +155,7 @@ export class PromoService
       throw err;
    }
 
-   private findUsers(): Promise<User[]> {
+   private _findUsers(): Promise<User[]> {
       return this._userRepository.find({relations: ['promo'], order: {ID: 'ASC'}});
    }
 }

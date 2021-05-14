@@ -15,6 +15,8 @@ if (promoInput === null || phoneInput === null || output === null || checkButton
 const CHECK_URL = 'api/check';
 const ACTIVATE_URL = 'api/activate';
 
+let pass = '';
+
 interface IPostData {
     promocode: string;
     phone: string;
@@ -27,6 +29,10 @@ const promoRe = new RegExp(`^[абвгдежзиклмнопрстуфхцчшэ
 const postData: IPostData = {
     promocode: '',
     phone: '',
+};
+
+const enterPass = () => {
+    pass = prompt('Введите пароль') || '';
 };
 
 const checkPromo = (promo: string): string | null => {
@@ -81,7 +87,7 @@ const unblockWorkspace = () => {
     activateButton.classList.remove('disabled');
 };
 
-const handleApiResponse = (res: IApiResponse, btnElem: HTMLButtonElement) => {
+const handleApiResponse = (res: IApiResponse, btnElem: HTMLButtonElement): void => {
     setTimeout(() => {
         output.innerText = res.result;
         switch (res.status) {
@@ -89,6 +95,13 @@ const handleApiResponse = (res: IApiResponse, btnElem: HTMLButtonElement) => {
                 output.classList.add('info');
                 output.classList.remove('warning');
                 output.classList.remove('error');
+                break;
+
+            case EScenarioStatus.UNAUTHORIZED:
+                output.classList.remove('info');
+                output.classList.add('warning');
+                output.classList.remove('error');
+                enterPass();
                 break;
 
             case EScenarioStatus.SCENARIO_FAIL:
@@ -149,7 +162,10 @@ const fetchData = (url: string, btnElem: HTMLButtonElement) => {
     const reqOptions = {
         method: 'post',
         body: JSON.stringify(postData),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+            'authorization': pass,
+            'Content-Type': 'application/json',
+        },
     };
     fetch(url, reqOptions)
         .then((raw) => {
@@ -200,5 +216,7 @@ activateButton.addEventListener('click', () => {
         fetchData(ACTIVATE_URL, activateButton);
     }
 });
+
+window.addEventListener('load', enterPass);
 
 })();

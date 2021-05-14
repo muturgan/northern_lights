@@ -1,46 +1,27 @@
-   //  *********************************
-   //  *                               *
-   //  *            Common             *
-   //  *                               *
-   //  *********************************
-   
 export const enum EScenarioStatus {
     SCENARIO_SUCCESS,
+    UNAUTHORIZED,
     SCENARIO_FAIL,
     SYSTEM_ERROR,
 }
-export interface IApiResponse {
+export interface IApiResponse<T = string> {
     readonly status: EScenarioStatus;
     readonly result: string;
-    readonly payload: string | null;
+    readonly payload: T | null;
 }
 
-export interface IScenarioSuccess extends IApiResponse {
+export interface IScenarioSuccess<T = string> extends IApiResponse<T> {
     readonly status: EScenarioStatus.SCENARIO_SUCCESS;
 }
 
-export interface IScenarioFail extends IApiResponse {
+export interface IUnauthorized<T = string> extends IApiResponse<T> {
+    readonly status: EScenarioStatus.UNAUTHORIZED;
+}
+
+export interface IScenarioFail<T = string> extends IApiResponse<T> {
     readonly status: EScenarioStatus.SCENARIO_FAIL;
 }
 
-export interface ISystemErrorResponse extends IApiResponse {
+export interface ISystemErrorResponse<T = string> extends IApiResponse<T> {
     readonly status: EScenarioStatus.SYSTEM_ERROR;
-}
-
-
-   //  *********************************
-   //  *                               *
-   //  *            Admin              *
-   //  *                               *
-   //  *********************************
-
-export const enum EAdminScenarioStatus {
-    SCENARIO_SUCCESS,
-    UNAUTHORIZED,
-    SYSTEM_ERROR,
-}
-
-export interface IAdminApiResponse<T> {
-    readonly status: EAdminScenarioStatus;
-    readonly payload: T;
 }
