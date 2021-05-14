@@ -7,6 +7,7 @@ const v = new Validator();
 const schema: ValidationSchema<IAppConfig> = {
     APP_HOST: 'string',
     APP_PORT: { type: 'number', positive: true, integer: true },
+    ADMIN_PASS: 'string',
     DB_CONFIG: {
         $$type: 'object',
         type: 'string',

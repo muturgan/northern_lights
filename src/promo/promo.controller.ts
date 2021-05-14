@@ -1,10 +1,10 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseFilters, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Headers, HttpCode, HttpStatus, Post, UseFilters, UsePipes } from '@nestjs/common';
 
 import { User } from './dal';
 import { PromoService } from './promo.service';
 import { PromoValidationPipe } from './providers';
 import { PromoExceptionFilter } from './providers/promo.error.filter';
-import { IApiResponse } from './system_models';
+import { IAdminApiResponse, IApiResponse } from './system_models';
 import { PromoDto, RegistrationDto } from './validation';
 
 
@@ -45,9 +45,9 @@ export class PromoController
 
    @Get('users')
    @HttpCode(HttpStatus.OK)
-   public getUsersList(): Promise<User[]>
+   public getUsersList(@Headers('Authorization') authHeader?: string): Promise<IAdminApiResponse<User[]>>
    {
-      return this._promoService.getUsersList();
+      return this._promoService.getUsersList(authHeader);
    }
 
 }

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, getManager, QueryFailedError, Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
-import { ApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnknownError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
+import { ApiResponse, EAdminScenarioStatus, IAdminApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnknownError, UserAlreadyExistsError, UserRegisteredResponse } from './system_models';
 import { ALPHABET, ALPHABET_LENGTH } from './validation';
 
 interface ICheckResult {
@@ -27,12 +28,21 @@ interface IOkPacket {
 @Injectable()
 export class PromoService
 {
+   private readonly _authHeader: string;
+
    constructor(
       @InjectRepository(User)
       private readonly _userRepository: Repository<User>,
       @InjectRepository(Promo)
       private readonly _promoRepository: Repository<Promo>,
-   ) {}
+      private readonly _config: ConfigService,
+   ) {
+      const authHeader = this._config.get<string>('ADMIN_PASS');
+      if (authHeader === undefined) {
+         throw new Error('Admin password not passed');
+      }
+      this._authHeader = authHeader;
+   }
 
    //  *********************************
    //  *                               *
@@ -87,8 +97,17 @@ export class PromoService
       return new PromoActivatedResponse();
    }
 
-   public getUsersList(): Promise<User[]> {
-      return this._userRepository.find({relations: ['promo'], order: {ID: 'ASC'}});
+   public async getUsersList(authHeader?: string): Promise<IAdminApiResponse<User[]>> {
+      if (authHeader !== this._authHeader) {
+         return {
+            status: EAdminScenarioStatus.UNAUTHORIZED,
+            payload: [],
+         };
+      }
+      return this.findUsers().then((users) => ({
+         status: EAdminScenarioStatus.SCENARIO_SUCCESS,
+         payload: users,
+      }));
    }
 
 
@@ -140,5 +159,9 @@ export class PromoService
          throw new UserAlreadyExistsError(phone);
       }
       throw err;
+   }
+
+   private findUsers(): Promise<User[]> {
+      return this._userRepository.find({relations: ['promo'], order: {ID: 'ASC'}});
    }
 }

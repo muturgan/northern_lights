@@ -10,6 +10,7 @@ export const configFactory: ConfigFactory<IAppConfig> = () => {
     const config: IAppConfig = {
         APP_HOST: ormconfig.APP_HOST,
         APP_PORT: parseInt(ormconfig.APP_PORT, 10),
+        ADMIN_PASS: ormconfig.ADMIN_PASS,
         DB_CONFIG: {
             type: ormconfig.type,
             host: ormconfig.host,

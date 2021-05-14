@@ -1,4 +1,5 @@
 import type { User } from '../promo/dal';
+import { EAdminScenarioStatus, IAdminApiResponse } from '../promo/system_models';
 
 interface IApiUser extends Omit<User, 'created_at'> {
     created_at: string;
@@ -11,7 +12,9 @@ interface IApiUser extends Omit<User, 'created_at'> {
         throw new Error('incomplete html');
     }
 
-    const render = (users: IApiUser[]) => {
+    let pass = '';
+
+    const render = (users: IApiUser[]): void => {
         const oldTrs = document.body.querySelectorAll('tr:not(.thead)');
         oldTrs.forEach((tr) => tr.remove());
 
@@ -29,8 +32,8 @@ interface IApiUser extends Omit<User, 'created_at'> {
         });
     };
 
-    const fetchUsers = (): Promise<IApiUser[]> => {
-        return fetch(USERS_URL)
+    const fetchUsers = (): Promise<IAdminApiResponse<IApiUser[]>> => {
+        return fetch(USERS_URL, {headers: {authorization: pass}})
         .then((raw) => {
             if (raw.ok !== true) {
                 throw new Error('fuck');
@@ -38,8 +41,30 @@ interface IApiUser extends Omit<User, 'created_at'> {
             return raw.json();
         });
     };
+
+    const handleAuthorized = (): Promise<IAdminApiResponse<IApiUser[]>> => {
+        pass = prompt('Введите пароль') || '';
+        return fetchUsers();
+    };
+
+    const handleApiData = (data: IAdminApiResponse<IApiUser[]>): void => {
+        switch (data.status) {
+            case EAdminScenarioStatus.SCENARIO_SUCCESS:
+                return render(data.payload);
+
+            case EAdminScenarioStatus.UNAUTHORIZED:
+                handleAuthorized().then(handleApiData);
+                return;
+
+            case EAdminScenarioStatus.SYSTEM_ERROR:
+                throw new Error('Не удалось получить данные');
+        
+            default:
+                throw new Error('Неизвестный статус ответа');
+        }
+    };
     
     window.addEventListener('load', () => {
-        fetchUsers().then((users) => render(users));
+        fetchUsers().then((result) => handleApiData(result));
     });
 })();
