@@ -164,10 +164,12 @@ const fetchData = (url: string, btnElem: HTMLButtonElement) => {
         method: 'post',
         body: JSON.stringify(postData),
         headers: {
-            'authorization': pass,
             'Content-Type': 'application/json',
-        },
+        } as Record<string, string>,
     };
+    if (pass) {
+        reqOptions.headers.authorization = pass;
+    }
     fetch(url, reqOptions)
         .then((raw) => {
             return raw.ok === true
