@@ -101,6 +101,7 @@ const handleApiResponse = (res: IApiResponse) => {
                 break;
 
             case EScenarioStatus.SCENARIO_FAIL:
+            case EScenarioStatus.UNAUTHORIZED:
                 output.classList.remove('info');
                 output.classList.add('warning');
                 output.classList.remove('error');
