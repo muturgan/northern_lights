@@ -88,6 +88,7 @@ const unblockWorkspace = () => {
 };
 
 const handleApiResponse = (res: IApiResponse, btnElem: HTMLButtonElement): void => {
+    pass = '';
     setTimeout(() => {
         output.innerText = res.result;
         switch (res.status) {

@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import fastifyCookie from 'fastify-cookie';
 
 import { AppModule } from './app.module';
 
@@ -10,6 +11,8 @@ async function bootstrap(): Promise<NestFastifyApplication>
       AppModule,
       new FastifyAdapter(),
    );
+
+   app.register(fastifyCookie);
 
    const configService = app.get(ConfigService);
    const appPort = configService.get('APP_PORT');
