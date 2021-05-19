@@ -1,4 +1,4 @@
-import Validator, { ValidationSchema } from 'fastest-validator';
+import Validator, { SyncCheckFunction, ValidationSchema } from 'fastest-validator';
 
 import { IAppConfig } from './typings';
 
@@ -22,7 +22,7 @@ const schema: ValidationSchema<IAppConfig> = {
     },
 };
 
-const check = v.compile(schema);
+const check = v.compile(schema) as SyncCheckFunction;
 
 export function validateConfig(config: Record<string, any>): config is IAppConfig {
     const result = check(config);
