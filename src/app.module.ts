@@ -1,7 +1,7 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import path from 'path';
+import path = require('path');
 
 import { configOptions } from './config';
 import { Promo, User } from './promo/dal';

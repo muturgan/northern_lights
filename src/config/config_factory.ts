@@ -1,5 +1,5 @@
 import { ConfigFactory } from '@nestjs/config';
-import path from 'path';
+import path = require('path');
 
 import { validateConfig } from './config_validator';
 import { IAppConfig } from './typings';
