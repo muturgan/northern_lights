@@ -11,7 +11,7 @@
     "start": "npm run build && npm run just_start",
     "just_start": "node ./dist/main.js",
     "build": "(rm -rf dist || npx rimraf dist) && tsc -P tsconfig.build.json && npm run build_front",
-    "build_front": "tsc -P tsconfig.front.json && npm run cleanup",
+    "build_front": "rm -rf static/js/generated && tsc -P tsconfig.front.json && npm run cleanup",
     "cleanup": "rm -rf static/js/promo && mv static/js/front static/js/generated && rm -rf src/promo/system_models/responses/typings.js && node cleanup.js",
     "dev": "cross-env NODE_ENV=dev nodemon",
     "audit": "npm audit | grep 'found' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
