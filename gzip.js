@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
+const zlib = require('zlib');
 
 const EXTENSIONS = ['.html', '.css', '.js'];
 const IMG_EXTENSIONS = ['.png', '.jpg', '.jpeg'];
@@ -35,7 +36,12 @@ function compressFolder(rootPath) {
 }
 
 function compressFile(filePath) {
-   cp.exec(`gzip -9 -c ${filePath} > ${filePath}.gz`);
+  //  cp.exec(`gzip -9 -c ${filePath} > ${filePath}.gz`);
+  const fileBuf = fs.readFileSync(filePath);
+  const gzipBuf = zlib.gzipSync(fileBuf, {level: 9});
+  const brBuf = zlib.brotliCompressSync(fileBuf);
+  fs.writeFileSync(filePath + '.gz', gzipBuf);
+  fs.writeFileSync(filePath + '.br', brBuf);
 }
 
 function jpgToWebp(filePath) {
