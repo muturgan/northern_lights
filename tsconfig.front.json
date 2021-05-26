@@ -2,8 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "es2020",
-    "rootDir": "./src/front",
-    "outDir": "./static/js/generated",
+    "rootDir": "./src",
+    "outDir": "./static/js",
     "resolveJsonModule": false,
     "noUnusedLocals": true
   },
