@@ -16,7 +16,7 @@ export abstract class ApiResponse<T = string> implements IApiResponse<T> {
 }
 
 export class ScenarioSuccessResponse<T = string> extends ApiResponse<T> implements IScenarioSuccess<T> {
-    public readonly status!: EScenarioStatus.SCENARIO_SUCCESS;
+    public override readonly status!: EScenarioStatus.SCENARIO_SUCCESS;
     
     constructor(result: string, payload?: T | null) {
         super(EScenarioStatus.SCENARIO_SUCCESS, result, payload);
@@ -29,7 +29,7 @@ export class UnauthorizedResponse<T = string> extends ApiResponse<T> implements 
         return new UnauthorizedResponse(err.message, err.payload);
     }
 
-    public readonly status!: EScenarioStatus.UNAUTHORIZED;
+    public override readonly status!: EScenarioStatus.UNAUTHORIZED;
     
     constructor(result: string, payload?: T | null) {
         super(EScenarioStatus.UNAUTHORIZED, result, payload);
@@ -42,7 +42,7 @@ export class ScenarioFailResponse<T = string> extends ApiResponse<T> implements 
         return new ScenarioFailResponse(err.message, err.payload);
     }
 
-    public readonly status!: EScenarioStatus.SCENARIO_FAIL;
+    public override readonly status!: EScenarioStatus.SCENARIO_FAIL;
     
     constructor(result: string, payload?: T | null) {
         super(EScenarioStatus.SCENARIO_FAIL, result, payload);
@@ -55,7 +55,7 @@ export class SystemErrorResponse<T = string> extends ApiResponse<T> implements I
         return new SystemErrorResponse(err.message, err.payload);
     }
 
-    public readonly status!: EScenarioStatus.SYSTEM_ERROR;
+    public override readonly status!: EScenarioStatus.SYSTEM_ERROR;
     
     constructor(result: string = DEFAULT_ERROR_MESSAGE, payload?: T | null) {
         super(EScenarioStatus.SYSTEM_ERROR, result, payload);
