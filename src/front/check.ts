@@ -12,6 +12,10 @@ if (promoInput === null || phoneInput === null || output === null || checkButton
     throw new Error('incomplete html');
 }
 
+promoInput.addEventListener('input', () => {
+   promoInput.value = promoInput.value.toUpperCase();
+});
+
 const CHECK_URL = 'api/check';
 const ACTIVATE_URL = 'api/activate';
 
@@ -24,7 +28,7 @@ interface IPostData {
 
 const phoneRe = /^(\+7)\d{10}$/;
 const cleanupRe = /\s+|-|\(|\)/g;
-const promoRe = new RegExp(`^[абвгдежзиклмнопрстуфхцчшэюя]+$`);
+const promoRe = /^[а-я]{4,8}-\d{3}$/;
 
 const postData: IPostData = {
     promocode: '',
@@ -36,12 +40,12 @@ const enterPass = () => {
 };
 
 const checkPromo = (promo: string): string | null => {
-    const trimed = promo.replace(cleanupRe, '').toLowerCase();
+    const trimed = promo.trim().toLowerCase();
     if (trimed.length === 0) {
         postData.promocode = '';
         return 'Промокод обязателен для ввода';
     }
-    if (trimed.length < 5 || trimed.length > 8) {
+    if (trimed.length < 8 || trimed.length > 12) {
         postData.promocode = '';
         return 'Вы ввели некорректный промокод';
     }

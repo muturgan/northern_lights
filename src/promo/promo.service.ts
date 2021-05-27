@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import fsp = require('fs/promises');
+import path = require('path');
 import { EntityManager, getManager, QueryFailedError, Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';
@@ -24,11 +26,16 @@ interface IOkPacket {
    changedRows: number;
 }
 
+const MIN_POSTFIX_VALUE = 1;
+const MAX_POSTFIX_VALUE = 999;
+const MAX_POSTFIX_LENGTH = 3;
+
 
 @Injectable()
 export class PromoService
 {
    private readonly _authHeader: string;
+   private _bips: ReadonlyArray<string> = []; // words from 4 to 8 chars
 
    constructor(
       @InjectRepository(User)
@@ -42,6 +49,8 @@ export class PromoService
          throw new Error('Admin password not passed');
       }
       this._authHeader = authHeader;
+
+      this._loadBips();
    }
 
    //  *********************************
@@ -123,7 +132,7 @@ export class PromoService
    }
 
    private async _grantPromo(holder_id: string, trx: EntityManager): Promise<string> {
-      const promocode = this._generateRandomPromo();
+      const promocode = this._generatePromoFromBips();
       const entity = this._promoRepository.create({
          promocode,
          holder_id,
@@ -132,12 +141,20 @@ export class PromoService
       return newPromo.promocode;
    }
 
-   private _generateRandomPromo(promocodeLength: number = 8): string {
+   protected _generateRandomPromo(promocodeLength: number = 8): string {
       const chars = [];
       for ( let i = 0; i < promocodeLength; i++ ) {
          chars.push(ALPHABET.charAt(Math.floor(Math.random() * ALPHABET_LENGTH)));
       }
       const promocode = chars.join('');
+      return promocode;
+   }
+
+   private _generatePromoFromBips(): string {
+      const randomIndex = this._generateRandomInt(0, this._bips.length - 1);
+      const bip = this._bips[randomIndex];
+      const postfix = this._generatePostfix();
+      const promocode = `${bip}-${postfix}`;
       return promocode;
    }
 
@@ -157,5 +174,21 @@ export class PromoService
 
    private _findUsers(): Promise<User[]> {
       return this._userRepository.find({relations: ['promo'], order: {ID: 'ASC'}});
+   }
+
+   private _generateRandomInt(min: number, max: number): number {
+      return Math.floor(Math.random() * max - min + 1) + min;
+   }
+
+   private _generatePostfix(): string {
+      const randomInt = this._generateRandomInt(MIN_POSTFIX_VALUE, MAX_POSTFIX_VALUE);
+      return randomInt.toString().padStart(MAX_POSTFIX_LENGTH, '0');
+   }
+
+   private async _loadBips(): Promise<void> {
+      const fileBuf = await fsp.readFile(path.join(process.cwd(), 'bip39_russian.txt'));
+      const content = fileBuf.toString('utf8');
+      const words = content.split('\n');
+      this._bips = words;
    }
 }

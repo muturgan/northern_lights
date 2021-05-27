@@ -2,9 +2,7 @@ import { registerDecorator, ValidationArguments, ValidationOptions } from 'class
 
 import { PhoneDto } from './phone.dto';
 
-import { ALPHABET } from '../constants';
-
-const promoRe = new RegExp(`^[${ ALPHABET }]+$`);
+const promoRe = /^[а-я]{4,8}-\d{3}$/;
 
 function IsValidPromo(validationOptions?: ValidationOptions): (object: Object, propertyName: string) => void {
     return function (object: Object, propertyName: string): void {
@@ -19,7 +17,7 @@ function IsValidPromo(validationOptions?: ValidationOptions): (object: Object, p
                         return false;
                     }
                     const trimed = value.trim().toLowerCase();
-                    if (trimed.length < 5 || trimed.length > 8) {
+                    if (trimed.length < 8 || trimed.length > 12) {
                         return false;
                     }
                     const result = promoRe.test(trimed);

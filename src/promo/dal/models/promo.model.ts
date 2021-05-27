@@ -9,7 +9,7 @@ export class Promo
 {
     public static readonly TABLE_NAME = TABLE_NAME;
 
-    @PrimaryColumn({ type: 'varchar', length: 8 })
+    @PrimaryColumn({ type: 'varchar', length: 12 })
     public promocode!: string;
 
     @Column({ type: 'bigint', unsigned: true, nullable: false })
