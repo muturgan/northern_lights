@@ -55,11 +55,11 @@ export class PromoExceptionFilter implements ExceptionFilter
 
       if (unknownError !== null) {
          unknownError = new UnknownError(undefined, exception);
-         console.log('\n-= OMFG... =-');
-         console.log(unknownError.message);
-         console.log('---------------');
-         console.log(exception);
-         console.log('-===========-\n');
+         console.info('\n-= OMFG... =-');
+         console.info(unknownError.message);
+         console.info('---------------');
+         console.info(exception);
+         console.info('-===========-\n');
       }
 
       res.send(response);

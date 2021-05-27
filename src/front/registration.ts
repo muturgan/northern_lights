@@ -128,8 +128,8 @@ const handleApiResponse = (res: IApiResponse) => {
 };
 
 const handleApiError = (err: unknown) => {
-    console.log('api error:');
-    console.log(err);
+    console.info('api error:');
+    console.info(err);
     setTimeout(() => {
         output.innerText = 'Извините, произошла ошибка при обращиении к серверу';
         output.classList.remove('info');
@@ -145,9 +145,9 @@ const handleApiError = (err: unknown) => {
 };
 
 const handleNot200 = async (status: number, statusText: string, res: Promise<string>): Promise<never> => {
-    console.log('Api call fail...');
-    console.log('status:', status);
-    console.log('statusText:', statusText);
+    console.info('Api call fail...');
+    console.info('status:', status);
+    console.info('statusText:', statusText);
     const body = await res;
     throw body;
 };
