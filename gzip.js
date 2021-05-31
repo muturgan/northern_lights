@@ -7,6 +7,9 @@ const EXTENSIONS = ['.html', '.css', '.js'];
 const IMG_EXTENSIONS = ['.png', '.jpg', '.jpeg'];
 const STATIC_ROOT = path.join(process.cwd(), 'static');
 
+// delete old gziped
+cp.exec(`find ./static \\( -iname *.gz -o -iname *.br \\) -type f -delete`);
+
 compressFolder(STATIC_ROOT);
 
 
