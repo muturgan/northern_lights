@@ -138,19 +138,13 @@ form.promo-form p input:disabled {
     font-weight: bold;
     display: block;
     width: 100%;
-    height: 50px;
+    height: 65px;
     border: 1.5px solid gray;
     border-radius: 4px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-}
-
-@media screen and (max-width: 390px) {
-    #promo-output {
-        height: 65px;
-    }
 }
 
 .info {
