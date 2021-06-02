@@ -45,12 +45,12 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.7",
     "tslib": "^2.2.0",
-    "typeorm": "^0.2.32"
+    "typeorm": "^0.2.33"
   },
   "devDependencies": {
     "@nestjs/serve-static": "^2.1.4",
     "@types/mysql": "^2.15.18",
-    "@types/node": "^14.17.1",
+    "@types/node": "^14.17.2",
     "cross-env": "^7.0.3",
     "fastify-static": "^4.2.2",
     "nodemon": "^2.0.7",
