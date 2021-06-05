@@ -10,4 +10,3 @@
   "exclude": ["src/config/*", "src/promo/**/*", "src/app.module.ts", "src/main.ts"],
   "include": ["src/front/*.ts"]
 }
-    
