@@ -35,10 +35,7 @@ class DummyCtx {
          };
       }
       if (options?.authHeader) {
-         // @ts-ignore
-         this.req.headers = {
-            [authKey]: options.authHeader,
-         };
+         this.req.headers[authKey] = options.authHeader;
       }
 
       const that = this;
