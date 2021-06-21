@@ -1,3 +1,4 @@
+// @ts-ignore
 import metatests = require('metatests');
 
 const defaultOptions: metatests.ImperativeTestOptions = {} as any;
