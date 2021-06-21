@@ -46,7 +46,7 @@ export class PromoController
    }
 
    @Get('users')
-   public getUsersList(@Headers('Authorization') authHeader?: string): Promise<IApiResponse<User[]>>
+   public getUsersList(@Headers('Authorization') authHeader: string): Promise<IApiResponse<User[]>>
    {
       return this._promoService.getUsersList(authHeader);
    }

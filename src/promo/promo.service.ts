@@ -34,7 +34,7 @@ const MAX_POSTFIX_LENGTH = 3;
 @Injectable()
 export class PromoService
 {
-   private readonly _authHeader: string;
+   private readonly _adminPassword: string;
    private _bips: ReadonlyArray<string> = []; // words from 4 to 8 chars
 
    constructor(
@@ -44,11 +44,11 @@ export class PromoService
       private readonly _promoRepository: Repository<Promo>,
       private readonly _config: ConfigService,
    ) {
-      const authHeader = this._config.get<string>('ADMIN_PASS');
-      if (authHeader === undefined) {
+      const adminPassword = this._config.get<string>('ADMIN_PASS');
+      if (adminPassword === undefined) {
          throw new Error('Admin password not passed');
       }
-      this._authHeader = authHeader;
+      this._adminPassword = adminPassword;
 
       this._loadBips();
    }
@@ -106,8 +106,8 @@ export class PromoService
       return new PromoActivatedResponse();
    }
 
-   public async getUsersList(authHeader?: string): Promise<UserListResponse> {
-      if (authHeader !== this._authHeader) {
+   public async getUsersList(adminPassword?: string): Promise<UserListResponse> {
+      if (adminPassword !== this._adminPassword) {
          throw new UnauthorizedError();
       }
       return this._findUsers().then((users) => new UserListResponse(users));
