@@ -139,6 +139,7 @@ form.promo-form p input:disabled {
 }
 
 #promo-output {
+    color: #6d6d6d;
     font-weight: bold;
     display: block;
     width: 100%;
@@ -164,7 +165,8 @@ form.promo-form p input:disabled {
 }
 
 footer.site-footer {
-    padding:1em 0 5.7em
+    padding:1em 0 5.7em;
+    background-color: #4a0b47;
 }
 
 .homescoring {
@@ -177,6 +179,7 @@ footer.site-footer {
 .homescoring a {
     margin-top: 13px;
     outline: none;
+    color: #96588a;
 }
 
 .homescoring a:focus-visible {
