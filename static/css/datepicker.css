@@ -15,18 +15,18 @@
     visibility: visible;
     z-index: 100500;
   }
-  .picker-wrap .picker { 
+  .picker-wrap .picker {
     margin: 50vh auto 0 auto;
     transform: translateY(-50%);
   }
-  
+
   /* (B) CONTAINER */
   .picker {
     max-width: 300px;
     background: #444444;
     padding: 10px;
   }
-  
+
   /* (C) MONTH + YEAR */
   .picker-m, .picker-y {
     width: 50%;
@@ -34,7 +34,7 @@
     box-sizing: border-box;
     font-size: 16px;
   }
-  
+
   /* (D) DAY */
   .picker-d table {
     color: #fff;
