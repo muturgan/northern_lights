@@ -39,6 +39,10 @@
 }
 /* LOADER */
 
+#masthead {
+    background-image: url(../img/banner.png);
+    background-color: lavender;
+}
 
 #promo-header {
     margin-top: 15px;
