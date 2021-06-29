@@ -147,7 +147,7 @@ const picker = {
       // CHECK IF DAY IS DISABLED
       const disabled = disableday.includes(thisday) || (year >= thisYear && ((month === calculatedManth && i > todayDay) || month > calculatedManth));
       // DAY OF MONTH, DISABLED
-      squares.push([i, disabled]); 
+      squares.push([i, disabled]);
       // NEXT DAY
       thisday++;
       if (thisday==8) { thisday = 1; }
@@ -185,10 +185,10 @@ const picker = {
     for (let i=0; i<total; i++) {
       if (i!=total && i%7==0) { row = table.insertRow(); }
       cell = row.insertCell();
-      if (squares[i] == DISABLED_DAY) { 
-        cell.classList.add("picker-d-b"); 
-      } else { 
-        cell.innerHTML = squares[i][0]; 
+      if (squares[i] == DISABLED_DAY) {
+        cell.classList.add("picker-d-b");
+      } else {
+        cell.innerHTML = squares[i][0];
         // NOT ALLOWED TO CHOOSE THIS DAY
         if (squares[i][1]) {
           cell.classList.add("picker-d-dd");
