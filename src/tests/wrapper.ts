@@ -1,5 +1,5 @@
 // @ts-ignore
-import metatests = require('metatests');
+import metatests from 'metatests';
 
 const defaultOptions: metatests.ImperativeTestOptions = {} as any;
 export const test = (caption: string, testFunc: (t: metatests.ImperativeTest) => void): void => {

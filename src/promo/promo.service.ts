@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import fsp = require('fs/promises');
-import path = require('path');
+import fsp from 'fs/promises';
+import path from 'path';
 import { EntityManager, getManager, QueryFailedError, Repository } from 'typeorm';
 
-import { Promo, User } from './dal/models';
-import { ApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnauthorizedError, UnknownError, UserAlreadyExistsError, UserListResponse, UserRegisteredResponse } from './system_models';
-import { ALPHABET, ALPHABET_LENGTH } from './validation';
+import { Promo, User } from './dal/models/index';
+import { ApiResponse, PromoActivatedResponse, PromoAlreadyActivatedResponse, PromoNotExistsResponse, PromoValidResponse, UnauthorizedError, UnknownError, UserAlreadyExistsError, UserListResponse, UserRegisteredResponse } from './system_models/index';
+import { ALPHABET, ALPHABET_LENGTH } from './validation/index';
 
 interface ICheckResult {
    promocode: string;

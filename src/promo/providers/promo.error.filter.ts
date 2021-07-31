@@ -3,7 +3,7 @@ import { FastifyReply } from 'fastify';
 
 import { PromoValidationPipe } from './promo.validation.pipe';
 
-import { IApiResponse, ScenarioError, ScenarioFailResponse, SystemError, SystemErrorResponse, UnauthorizedError, UnauthorizedResponse, UnknownError, ValidationErrorResponse } from '../system_models';
+import { IApiResponse, ScenarioError, ScenarioFailResponse, SystemError, SystemErrorResponse, UnauthorizedError, UnauthorizedResponse, UnknownError, ValidationErrorResponse } from '../system_models/index';
 
 
 

@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const cp = require('child_process');
-const zlib = require('zlib');
+import fs from 'fs';
+import path from 'path';
+import cp from 'child_process';
+import zlib from 'zlib';
 
 const EXTENSIONS = ['.html', '.css', '.js'];
 const IMG_EXTENSIONS = ['.png', '.jpg', '.jpeg'];

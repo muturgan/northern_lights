@@ -1,2 +1,2 @@
-export * from './dto';
+export * from './dto/index';
 export * from './constants';

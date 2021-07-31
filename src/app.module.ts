@@ -1,10 +1,10 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import path = require('path');
+// import path from 'path';
 
-import { configOptions } from './config';
-import { Promo, User } from './promo/dal';
+import { configOptions } from './config/index';
+import { Promo, User } from './promo/dal/index';
 import { PromoModule } from './promo/promo.module';
 
 const dbModels = [
@@ -26,14 +26,14 @@ const imports: Array<DynamicModule | Type<any>> = [
    }),
 ];
 
-if (process.env.NODE_ENV === 'dev') {
-   const NestStatic = require('@nestjs/serve-static');
-   imports.push(
-      NestStatic.ServeStaticModule.forRoot({
-         rootPath: path.join(process.cwd(), 'static'),
-      }),
-   );
-}
+// if (process.env.NODE_ENV === 'dev') {
+//    import NestStatic from '@nestjs/serve-static';
+//    imports.push(
+//       NestStatic.ServeStaticModule.forRoot({
+//          rootPath: path.join(process.cwd(), 'static'),
+//       }),
+//    );
+// }
 
 @Module({imports})
 export class AppModule {}

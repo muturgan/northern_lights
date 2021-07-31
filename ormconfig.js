@@ -1,10 +1,11 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
+
 const {error, parsed} = dotenv.config();
 if (error !== undefined || parsed === undefined) {
     throw error;
 }
 
-const options = {
+export const options = {
     APP_HOST: parsed.APP_HOST,
     APP_PORT: parsed.APP_PORT,
 
@@ -27,6 +28,3 @@ const options = {
         "migrationsDir": `src/promo/dal/migrations`,
     },
 };
-
-
-module.exports = options;
