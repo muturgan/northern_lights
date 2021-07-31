@@ -19,7 +19,7 @@ files.forEach((fileName) => {
 
 function removeJsFiles(rootPath) {
     const entries = fs.readdirSync(rootPath);
- 
+
     entries.forEach((entry) => {
         const entryPath = path.join(rootPath, entry);
 
