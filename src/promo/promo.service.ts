@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import fsp = require('fs/promises');
-import path = require('path');
+import fsp from 'fs/promises';
+import path from 'path';
 import { EntityManager, getManager, QueryFailedError, Repository } from 'typeorm';
 
 import { Promo, User } from './dal/models';

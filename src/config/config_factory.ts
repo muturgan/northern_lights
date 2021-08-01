@@ -1,12 +1,10 @@
 import { ConfigFactory } from '@nestjs/config';
-import path = require('path');
 
 import { validateConfig } from './config_validator';
+import { options as ormconfig } from './ormconfig';
 import { IAppConfig } from './typings';
 
 export const configFactory: ConfigFactory<IAppConfig> = () => {
-   const ormconfig = require(path.join(process.cwd(), 'ormconfig'));
-
    const config: IAppConfig = {
       APP_HOST: ormconfig.APP_HOST,
       APP_PORT: parseInt(ormconfig.APP_PORT, 10),
