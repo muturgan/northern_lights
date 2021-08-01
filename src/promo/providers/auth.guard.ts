@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
-import { UnauthorizedError } from '../system_models/index';
+import { UnauthorizedError } from '../system_models';
 
 const authKey = 'authorization';
 const cookieKey = `__Secure-${authKey}`;

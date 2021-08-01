@@ -3,8 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import path from 'path';
 
-import { configOptions } from './config/index';
-import { Promo, User } from './promo/dal/index';
+import { configOptions } from './config';
+import { Promo, User } from './promo/dal';
 import { PromoModule } from './promo/promo.module';
 
 const dbModels = [

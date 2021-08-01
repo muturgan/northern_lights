@@ -1,2 +1,2 @@
-export * from './errors/index';
-export * from './responses/index';
+export * from './errors';
+export * from './responses';

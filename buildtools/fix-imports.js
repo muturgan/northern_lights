@@ -2,9 +2,9 @@ import path from 'path';
 import fs from 'fs';
 
 const START_PATH = path.join(process.cwd(), 'dist');
-const IMPORT_REGEXP = /^(import [^';]* from '(\.\/|(\.\.\/)+)[^';]*)'/g;
-const EXPORT_REGEXP = /^(export \* from '(\.\/|(\.\.\/)+)[^';]*)'/g;
+const IMPORT_REGEXP = /^((import|export) [^';]* from '(\.\/|(\.\.\/)+)[^';]*)'/g;
 const REPLACE_STRING = "$1.js'";
+const REPLACE_STRING_WITH_INDEX = "$1/index.js'";
 const JS_EXT = '.js';
 
 
@@ -31,11 +31,30 @@ function fixImportsAtFolder(rootPath) {
 function fixImportsAtFile(filePath) {
   const content = fs.readFileSync(filePath).toString('utf8');
   const lines = content.split('\n');
-  const fixedLines = lines.map((l) => l.replace(IMPORT_REGEXP, REPLACE_STRING).replace(EXPORT_REGEXP, REPLACE_STRING));
+  const fixedLines = lines.map((l) => {
+    if (!l.match(IMPORT_REGEXP)) {
+      return l;
+    }
+
+    const [_, importPath] = l.split(`'`);
+    const fullPath = path.join(filePath, '..', importPath);
+    const exists = fs.existsSync(fullPath);
+    if (exists === false) {
+      return l.replace(IMPORT_REGEXP, REPLACE_STRING);
+    }
+
+    const stat = fs.statSync(fullPath);
+    const isDirectory = stat.isDirectory();
+    if (isDirectory === false) {
+      return l;
+    }
+
+    return l.replace(IMPORT_REGEXP, REPLACE_STRING_WITH_INDEX);
+  });
   const withFixedImports = fixedLines.join('\n');
   fs.writeFileSync(filePath, withFixedImports);
 }
 
 
 fixImportsAtFolder(START_PATH);
-console.log('\nimports fixed...\n');
+console.log('imports fixed...');

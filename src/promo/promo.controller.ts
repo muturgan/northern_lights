@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Headers, HttpCode, HttpStatus, Post, UseFilters, UseGuards, UsePipes } from '@nestjs/common';
 
-import { User } from './dal/index';
+import { User } from './dal';
 import { PromoService } from './promo.service';
-import { AuthGuard, PromoValidationPipe } from './providers/index';
+import { AuthGuard, PromoValidationPipe } from './providers';
 import { PromoExceptionFilter } from './providers/promo.error.filter';
 import { IApiResponse } from './system_models';
-import { PromoDto, RegistrationDto } from './validation/index';
+import { PromoDto, RegistrationDto } from './validation';
 
 
 @UsePipes(new PromoValidationPipe())
