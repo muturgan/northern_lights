@@ -66,5 +66,5 @@ interface IApiUser extends Omit<User, 'created_at'> {
 
    window.addEventListener('load', () => {
       fetchUsers().then((result) => handleApiData(result));
-   });
+   }, {once: true});
 })();

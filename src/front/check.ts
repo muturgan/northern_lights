@@ -224,6 +224,6 @@ activateButton.addEventListener('click', () => {
    }
 });
 
-window.addEventListener('load', enterPass);
+window.addEventListener('load', enterPass, {once: true});
 
 })();

@@ -244,11 +244,15 @@ const picker = {
   }
 };
 
-window.addEventListener("load", function(){
-  picker.attach({
-    target: "promo-input-birthdate",
-    startmon: true, // WEEK START ON MON
-  });
-});
+window.addEventListener(
+  "load",
+  function(){
+    picker.attach({
+      target: "promo-input-birthdate",
+      startmon: true, // WEEK START ON MON
+    });
+  },
+  {once: true}
+);
 
 })();
