@@ -50,11 +50,12 @@
   }
   /* HEADER CELLS */
   .picker-d-h td {
+    background: lightgray !important;
     font-weight: bold;
   }
   /* BLANK DATES */
   .picker-d-b {
-    background: lightgray !important;
+    background: gray !important;
   }
   /* TODAY or SELECTED DAY */
   .picker-d-td {
@@ -62,6 +63,7 @@
   }
   /* PICKABLE DATES */
   .picker-d-d {
+    background: lightgray !important;
     cursor: pointer !important;
   }
   .picker-d-d:hover {
@@ -70,6 +72,6 @@
   /* UNPICKABLE DATES */
   .picker-d-dd {
     /* color: #4e4e4e !important; */
-    background: lightgray !important;
+    background: darkgray !important;
     cursor: default !important;
   }
