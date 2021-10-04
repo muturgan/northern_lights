@@ -1,6 +1,7 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+// import { ServeStaticModule } from '@nestjs/serve-static';
 // import path from 'path';
 
 import { configOptions } from './config';
@@ -27,9 +28,8 @@ const imports: Array<DynamicModule | Type<any>> = [
 ];
 
 // if (process.env.NODE_ENV === 'dev') {
-//    import NestStatic from '@nestjs/serve-static';
 //    imports.push(
-//       NestStatic.ServeStaticModule.forRoot({
+//       ServeStaticModule.forRoot({
 //          rootPath: path.join(process.cwd(), 'static'),
 //       }),
 //    );
