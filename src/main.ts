@@ -1,7 +1,7 @@
+import fastifyCookie from '@fastify/cookie';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
-import fastifyCookie from 'fastify-cookie';
 
 import { AppModule } from './app.module';
 

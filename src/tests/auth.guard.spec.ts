@@ -1,7 +1,7 @@
+import { CookieSerializeOptions } from '@fastify/cookie';
 import { ExecutionContext } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { CookieSerializeOptions } from 'fastify-cookie';
 import { test } from 'metatests';
 
 import { AuthGuard } from '../promo/providers/auth.guard';
